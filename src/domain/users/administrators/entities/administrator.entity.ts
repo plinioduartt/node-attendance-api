@@ -1,5 +1,5 @@
 import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
-import User, { AbstractUser } from "../../entity";
+import User, { AbstractUser } from "../../abstract-user";
 // import roles from "../../enums/roles.enum";
 
 export type AdministratorType = AbstractUser & {

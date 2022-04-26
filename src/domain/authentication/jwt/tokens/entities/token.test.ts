@@ -1,6 +1,6 @@
 import Token, { TokenType } from './token.entity';
 import { omit } from 'lodash';
-import { AbstractUser } from '@/src/domain/users/entity';
+import { AbstractUser } from '@/src/domain/users/abstract-user';
 import { JwtPayload } from 'jsonwebtoken';
 
 describe('Token Entity', () => {

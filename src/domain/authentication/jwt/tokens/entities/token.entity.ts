@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import jsonwebtoken, { JwtPayload } from 'jsonwebtoken';
 import IsValidInstanceType from "@/src/domain/users/_commons/types/isValidInstance.type";
-import { AbstractUser } from '@/src/domain/users/entity';
+import { AbstractUser } from '@/src/domain/users/abstract-user';
 import CustomError from '@/src/http/errors/customError';
 import tokenErrors from '../errors/token.errors';
 // import { omit } from 'lodash';
