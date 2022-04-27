@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export type AbstractUser = {
 	id?: string;
@@ -9,16 +9,16 @@ export type AbstractUser = {
 	roleId: string;
 }
 
-type SignInType = {
-	email: string;
-	password: string;
+export type CheckPasswordType = {
+	enteredPassword: string;
+	hashedPassword: string;
 }
 
 abstract class User {
 	protected _id?: string;
 	public name: string;
 	public email: string;
-	protected _password: string;
+	private _password: string;
 	public roleId: string;
 
 	constructor({
@@ -36,19 +36,14 @@ abstract class User {
 	}
 
 	static async hashPassword(password: string): Promise<string> {
-		const saltRounds = 10;
-		try {
-			const hash = bcrypt.hash(password, saltRounds);
-			return hash;
-		} catch (error) {
-			console.error(`An error occurred while generating hash password: `, error);
-			throw new Error(`An error occurred while generating hash password: ${error}`);
-		}
+		const saltRounds = 12;
+		const hash = await bcrypt.hash(password, saltRounds);
+		return hash;
 	}
 
-	static async checkPassword({ email, password }: SignInType) {
-		console.info(`email: ${email}`);
-		console.info(`password: ${password}`);
+	static checkPassword({ enteredPassword, hashedPassword }: CheckPasswordType): Promise<boolean> {
+		const result = bcrypt.compare(enteredPassword, hashedPassword);
+		return result;
 	}
 
 	get id() {

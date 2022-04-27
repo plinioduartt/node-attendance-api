@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import mockedUsers from './users.list';
+import mockedUsers from './users-list.mock';
 
 const mockedUserRepository = {
   listAll: jest.fn().mockImplementation(() => {

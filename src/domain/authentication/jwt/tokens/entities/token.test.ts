@@ -3,6 +3,8 @@ import { omit } from 'lodash';
 import { AbstractUser } from '@/src/domain/users/abstract-user';
 import { JwtPayload } from 'jsonwebtoken';
 
+jest.setTimeout(50000);
+
 describe('Token Entity', () => {
     const TokenData: TokenType = {
         userId: 'string',

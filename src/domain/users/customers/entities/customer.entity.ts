@@ -1,6 +1,6 @@
 import User, { AbstractUser } from "../../abstract-user";
 import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
-// import roles from "../../enums/roles.enum";
+import roles from "../../enums/roles.enum";
 
 export type CustomerType = AbstractUser & {
   nickname: string;
@@ -21,7 +21,8 @@ class Customer extends User {
   }
 
   static async create(data: CustomerType): Promise<Customer> {
-    return new Customer(data);
+    const newCustomer = new Customer(data);
+    return newCustomer;
   }
 
   isValidInstance(): IsValidInstanceType {
@@ -40,19 +41,26 @@ class Customer extends User {
 export default Customer;
 
 // (async () => {
-//   const password = await Customer.hashPassword('123456');
+//   const password = "123456";
+//   const hashedPassword = await Customer.hashPassword(password);
 
-//   const test = Customer.create({
+//   const newCustomer = await Customer.create({
 //     name: 'teste',
 //     email: 'teste',
 //     nickname: 'teste',
 //     city: 'teste',
 //     state: 'teste',
 //     roleId: roles.CUSTOMER,
-//     password
+//     password: hashedPassword
 //   });
 
+//   const isValidPassword = await Customer.checkPassword({
+//     enteredPassword: password,
+//     hashedPassword: newCustomer.password
+//   });
+
+//   console.log("isValidPassword ==> ", isValidPassword);
 //   console.log("Roles enum ==> ", roles);
-//   console.log("Usuário criado ==> ", test);
-//   console.log("Usuário é válido? ==> ", test.isValid());
+//   console.log("Usuário criado ==> ", newCustomer);
+//   console.log("Usuário é válido? ==> ", newCustomer.isValidInstance());
 // })()

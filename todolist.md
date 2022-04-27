@@ -4,10 +4,10 @@
 
 - New registration
 - Login
-- View attendance histories
 - Should be able to view profile data
 - Should be able to edit any profile data
 - Open new attendance request
+- View attendance histories
 - Chat in real time with an attendant
 - Submit attendance feedback
 
