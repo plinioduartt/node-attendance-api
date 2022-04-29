@@ -1,3 +1,4 @@
+import CustomError from "@/src/http/errors/customError";
 import User, { AbstractUser } from "../../abstract-user";
 import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
 // import roles from "../../enums/roles.enum";
@@ -26,7 +27,16 @@ class Attendant extends User {
   }
 
   static async create(data: AttendantType): Promise<Attendant> {
-    return new Attendant(data);
+    const newAttendant = new Attendant(data);
+    const { isValid, errors } = newAttendant.isValidInstance();
+
+    if (!isValid && errors.length > 0) {
+      const ERROR_MSG = errors.join(' ');
+      throw new CustomError(400, ERROR_MSG);
+    }
+
+    newAttendant._password = await User.hashPassword(data.password);
+    return newAttendant;
   }
 
   isValidInstance(): IsValidInstanceType {

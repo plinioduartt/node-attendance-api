@@ -2,6 +2,7 @@ import { CustomerType } from "@/src/domain/users/customers/entities/customer.ent
 import roles from "@/src/domain/users/enums/roles.enum";
 import ApiJsonResponseCreateType from "@/src/http/types/api-responses/api-json-response-create.type";
 import CustomerRepository from "@/src/infrastructure/users/customers/database/in-memory/repositories/customer.repository";
+import mockedUsers from "@/src/mock/users/users-list.mock";
 import { Request, Response } from "express";
 import CustomerService from "../services/customer.service";
 import CustomerController from "./customer.controller";
@@ -59,6 +60,45 @@ describe("Customer controller", () => {
         expect(response.status).toBeCalledTimes(1);
         expect(response.json).toBeCalledTimes(1);
         expect(statusCode).toBe(201);
+        expect(json).toHaveProperty('data');
+        expect(json.data).toHaveProperty('id');
+        expect(json.data).toHaveProperty('name');
+        expect(json.data).toHaveProperty('nickname');
+        expect(json.data).toHaveProperty('email');
+        expect(json.data).not.toHaveProperty('_password');
+        expect(json.data).toHaveProperty('roleId');
+        expect(json.data).toHaveProperty('city');
+        expect(json.data).toHaveProperty('state');
+    });
+
+    it("Retrieve customer ==> Should return a customer by id", async () => {
+        // arrange
+        const request: Partial<Request> = {
+            params: {
+                id: mockedUsers.customers[0].id ?? '625cc239a814e93465aaa470'
+            }
+        };
+
+        const response: Partial<Response> = {
+            status: jest.fn()
+                .mockReturnValue((code: number) => code)
+                .mockReturnThis()
+                .mockName('CustomerController:retrieve() ->  Mock response status function'),
+            json: jest.fn()
+                .mockReturnValue((data: unknown) => data)
+                .mockReturnThis()
+                .mockName('CustomerController:retrieve() ->  Mock response json function')
+        }
+
+        // act
+        const result: any = await sut.retrieve(request as Request, response as Response);
+        const statusCode = result.status.mock.calls[0][0];
+        const json: ApiJsonResponseCreateType<CustomerType> = result.json.mock.calls[0][0];
+
+        // asserts
+        expect(response.status).toBeCalledTimes(1);
+        expect(response.json).toBeCalledTimes(1);
+        expect(statusCode).toBe(200);
         expect(json).toHaveProperty('data');
         expect(json.data).toHaveProperty('id');
         expect(json.data).toHaveProperty('name');

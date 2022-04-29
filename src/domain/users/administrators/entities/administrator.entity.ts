@@ -1,5 +1,6 @@
 import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
 import User, { AbstractUser } from "../../abstract-user";
+import CustomError from "@/src/http/errors/customError";
 // import roles from "../../enums/roles.enum";
 
 export type AdministratorType = AbstractUser & {
@@ -18,7 +19,16 @@ class Administrator extends User {
   }
 
   static async create(data: AdministratorType): Promise<Administrator> {
-    return new Administrator(data);
+    const newAdministrator = new Administrator(data);
+    const { isValid, errors } = newAdministrator.isValidInstance();
+
+    if (!isValid && errors.length > 0) {
+      const ERROR_MSG = errors.join(' ');
+      throw new CustomError(400, ERROR_MSG);
+    }
+
+    newAdministrator._password = await User.hashPassword(data.password);
+    return newAdministrator;
   }
 
   isValidInstance(): IsValidInstanceType {

@@ -1,6 +1,7 @@
 import User, { AbstractUser } from "../../abstract-user";
 import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
-import roles from "../../enums/roles.enum";
+import CustomError from "@/src/http/errors/customError";
+// import roles from "../../enums/roles.enum";
 
 export type CustomerType = AbstractUser & {
   nickname: string;
@@ -22,6 +23,14 @@ class Customer extends User {
 
   static async create(data: CustomerType): Promise<Customer> {
     const newCustomer = new Customer(data);
+    const { isValid, errors } = newCustomer.isValidInstance();
+
+    if (!isValid && errors.length > 0) {
+      const ERROR_MSG = errors.join(' ');
+      throw new CustomError(400, ERROR_MSG);
+    }
+
+    newCustomer._password = await User.hashPassword(data.password);
     return newCustomer;
   }
 

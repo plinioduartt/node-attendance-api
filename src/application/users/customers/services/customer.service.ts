@@ -1,7 +1,7 @@
 import Customer, { CustomerType } from "@/src/domain/users/customers/entities/customer.entity";
 import ICustomerRepository from "@/src/domain/users/customers/repository/repository.interface";
 import CustomError from "@/src/http/errors/customError";
-import retrieveCustomerMapper, { MappedCustomer } from "@/src/infrastructure/users/customers/presenters/mappers/retrieve-customer.mapper";
+import { CustomerDtoType } from "@/src/infrastructure/users/customers/presenters/mappers/customer.mapper";
 import ICustomerService from "./customer.interface";
 
 class CustomerService implements ICustomerService {
@@ -10,25 +10,19 @@ class CustomerService implements ICustomerService {
         this._repository = repository;
     }
 
-    async create(data: CustomerType): Promise<MappedCustomer> {
-        const hashedPassword = await Customer.hashPassword(data.password);
-        const newCustomer = await Customer.create({
-            ...data,
-            password: hashedPassword
-        });
-        const { isValid, errors } = newCustomer.isValidInstance();
+    async create(data: CustomerType): Promise<CustomerDtoType> {
+        const newCustomerInstance = await Customer.create(data);
+        const newCustomer = await this._repository.create(newCustomerInstance);
+        return newCustomer;
+    }
 
-        if (!isValid && errors.length > 0) {
-            const ERROR_MSG = errors.join(' ');
-            throw new CustomError(400, ERROR_MSG);
+    async retrieve(id: string): Promise<CustomerDtoType> {
+        const customerFound = await this._repository.retrieve(id);
+
+        if (!customerFound) {
+            throw new CustomError(404, `No customers found with id ${id}.`);
         }
-
-        await this._repository.create(newCustomer);
-        
-        // Adapter:Converting the internal data type to an http external data type that clients expects
-        const mappedCustomer = retrieveCustomerMapper(newCustomer);
-        
-        return mappedCustomer;
+        return customerFound
     }
 }
 

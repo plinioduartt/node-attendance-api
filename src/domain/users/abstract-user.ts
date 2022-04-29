@@ -7,6 +7,7 @@ export type AbstractUser = {
 	email: string;
 	password: string;
 	roleId: string;
+	createdAt?: Date | undefined;
 }
 
 export type CheckPasswordType = {
@@ -18,7 +19,7 @@ abstract class User {
 	protected _id?: string;
 	public name: string;
 	public email: string;
-	private _password: string;
+	protected _password: string;
 	public roleId: string;
 
 	constructor({
