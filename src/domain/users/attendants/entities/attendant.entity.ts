@@ -1,13 +1,13 @@
 import CustomError from "@/src/http/errors/customError";
 import User, { AbstractUser } from "../../abstract-user";
 import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
-// import roles from "../../enums/roles.enum";
 
 export type AttendantType = AbstractUser & {
   cpf: string;
   city: string;
   state: string;
   rating?: number;
+  number_of_attendances?: number;
 }
 
 class Attendant extends User {
@@ -15,6 +15,7 @@ class Attendant extends User {
   public readonly city: string;
   public readonly state: string;
   public readonly rating: number;
+  public readonly number_of_attendances: number;
 
   private constructor({ cpf, city, state, rating, ...args }: AttendantType) {
     super(args);
@@ -23,12 +24,14 @@ class Attendant extends User {
     this.state = state;
 
     const DEFAULT_INITIAL_RATING = 10;
+    const DEFAULT_INITIAL_NUMBER_OF_ATTENDANCES = 0;
     this.rating = DEFAULT_INITIAL_RATING;
+    this.number_of_attendances = DEFAULT_INITIAL_NUMBER_OF_ATTENDANCES;
   }
 
   static async create(data: AttendantType): Promise<Attendant> {
-    const newAttendant = new Attendant(data);
-    const { isValid, errors } = newAttendant.isValidInstance();
+    const newAttendant: Attendant = new Attendant(data);
+    const { isValid, errors }: IsValidInstanceType = newAttendant.isValidInstance();
 
     if (!isValid && errors.length > 0) {
       const ERROR_MSG = errors.join(' ');
@@ -39,9 +42,19 @@ class Attendant extends User {
     return newAttendant;
   }
 
-  isValidInstance(): IsValidInstanceType {
-    const propertyNames = Object.getOwnPropertyNames(this);
-    const errors = propertyNames
+  static async update(data: AttendantType): Promise<AttendantType> {
+    if (!!data.password) {
+      data.password = await this.hashPassword(data.password);
+    }
+
+    // rating...
+
+    return data;
+  }
+
+  private isValidInstance(): IsValidInstanceType {
+    const propertyNames: string[] = Object.getOwnPropertyNames(this);
+    const errors: (string | null)[] = propertyNames
       .map(property => this[property as keyof Attendant] != null ? null : `property ${property} is missing.`)
       .filter(item => !!item);
 
@@ -53,21 +66,3 @@ class Attendant extends User {
 }
 
 export default Attendant;
-
-// (async () => {
-//   const password = await Attendant.hashPassword('123456');
-
-//   const test = await Attendant.create({
-//     name: 'teste',
-//     email: 'teste',
-//     cpf: 'teste',
-//     city: 'teste',
-//     state: 'teste',
-//     roleId: roles.ATTENDANT,
-//     password,
-//   });
-
-//   console.log("Roles enum ==> ", roles);
-//   console.log("Usuário criado ==> ", test);
-//   console.log("Usuário é válido? ==> ", test.isValid());
-// })()

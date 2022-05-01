@@ -10,20 +10,38 @@ import customerMapper, { CustomerDtoType } from "../../../presenters/mappers/cus
 class CustomerRepository implements ICustomerRepository {
     public customers: CustomerType[] = mockedUsers.customers;
 
+    async list(): Promise<CustomerDtoType[]> {
+        return this.customers;
+    }
+
     async create(data: CustomerType): Promise<CustomerDtoType> {
         // insert customer into database
         this.customers.push(data);
 
         // Adapter:Converting the internal data type to an http external data type that clients expects
         // map the properties of the customer as dto
-        const mappedCustomer = customerMapper.domainToDto(data);
+        const mappedCustomer = await customerMapper.domainToDto(data);
         return mappedCustomer;
     }
 
     async retrieve(id: string): Promise<CustomerDtoType | undefined> {
-        const customer = this.customers.find(item => item.id === id);
+        const customer: CustomerDtoType & CustomerType | undefined = this.customers.find(item => item.id === id);
+        if (!!customer) {
+            const mappedCustomer = await customerMapper.domainToDto(customer);
+            return mappedCustomer;
+        }
         return customer;
     }
+
+    async update(id: string, data: CustomerType): Promise<CustomerDtoType> {
+        const index = this.customers.findIndex(item => item.id === id);
+        this.customers[index] = {
+            ...this.customers[index],
+            ...data
+        };
+        const updatedUser = this.customers[index];
+        const mappedCustomer = await customerMapper.domainToDto(updatedUser);
+        return mappedCustomer;    }
 }
 
 export default CustomerRepository;

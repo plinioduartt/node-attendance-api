@@ -36,11 +36,11 @@ describe("Administrator Entity", () => {
 
     it("Administrator entity - Validate creation: Should return an error when missing a property", async () => {
         // arrange
-        const MISSED_PROPERTY_SENDED = 'city';
+        const MISSED_PROPERTY = 'city';
         const MISSED_PROPERTY_EXPECTED = 'city';
 
         // act
-        const request = async () => await Administrator.create(omit(administratorData, [MISSED_PROPERTY_SENDED]) as AdministratorType);
+        const request = async () => await Administrator.create(omit(administratorData, [MISSED_PROPERTY]) as AdministratorType);
 
         // asserts
         expect(request).rejects.toThrowError(`property ${MISSED_PROPERTY_EXPECTED} is missing.`);

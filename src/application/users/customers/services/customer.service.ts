@@ -10,19 +10,37 @@ class CustomerService implements ICustomerService {
         this._repository = repository;
     }
 
+    async list(): Promise<CustomerDtoType[]> {
+        const customers: CustomerDtoType[] = await this._repository.list();
+        return customers;
+    }
+
     async create(data: CustomerType): Promise<CustomerDtoType> {
-        const newCustomerInstance = await Customer.create(data);
-        const newCustomer = await this._repository.create(newCustomerInstance);
+        const newCustomerInstance: Customer = await Customer.create(data);
+        const newCustomer: CustomerDtoType = await this._repository.create(newCustomerInstance);
         return newCustomer;
     }
 
     async retrieve(id: string): Promise<CustomerDtoType> {
-        const customerFound = await this._repository.retrieve(id);
+        const customerFound: CustomerDtoType | undefined = await this._repository.retrieve(id);
 
         if (!customerFound) {
             throw new CustomError(404, `No customers found with id ${id}.`);
         }
-        return customerFound
+
+        return customerFound;
+    }
+
+    async update(id: string, data: CustomerType): Promise<CustomerDtoType> {
+        const customerFound: CustomerDtoType | undefined = await this._repository.retrieve(id);
+
+        if (!customerFound) {
+            throw new CustomError(404, `No customers found with id ${id}.`);
+        }
+
+        const updatedCustomer: CustomerType = await Customer.update(data);
+        const customer: CustomerDtoType = await this._repository.update(id, updatedCustomer);
+        return customer;
     }
 }
 

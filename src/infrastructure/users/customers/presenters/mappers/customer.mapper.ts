@@ -3,7 +3,7 @@ import { CustomerType } from "@/src/domain/users/customers/entities/customer.ent
 export type CustomerDtoType = {
     id?: string | undefined;
     name: string;
-    nickname?: string | undefined;
+    nickname: string;
     email: string;
     city: string;
     state: string;
@@ -12,7 +12,7 @@ export type CustomerDtoType = {
 }
 
 const customerMapper = {
-    domainToDto: (data: CustomerType) => {
+    domainToDto: async (data: CustomerType): Promise<CustomerDtoType> => {
         const result: CustomerDtoType = {
             id: data.id,
             name: data.name,
@@ -25,7 +25,7 @@ const customerMapper = {
         };
 
         return result;
-    },
+    }
 }
 
 export default customerMapper;

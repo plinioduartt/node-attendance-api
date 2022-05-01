@@ -1,23 +1,23 @@
-import { CustomerType } from "@/src/domain/users/customers/entities/customer.entity";
+import { AttendantType } from "@/src/domain/users/attendants/entities/attendant.entity";
 import ApiJsonErrorType from "@/src/http/types/api-errors/api-error-response.type";
 import ApiJsonResponseCreateType from "@/src/http/types/api-responses/api-json-response-create.type";
 import ApiJsonResponseListType from "@/src/http/types/api-responses/api-json-response-list.type";
 import ApiJsonResponseRetrieveType from "@/src/http/types/api-responses/api-json-response-retrieve.type";
-import { CustomerDtoType } from "@/src/infrastructure/users/customers/presenters/mappers/customer.mapper";
+import { AttendantDtoType } from "@/src/infrastructure/users/attendants/presenters/mappers/attendant.mapper";
 import { Request, Response } from "express";
-import ICustomerService from "../services/customer.interface";
+import IAttendantService from "../services/attendant.interface";
 
-class CustomerController {
-    private readonly _service: ICustomerService;
-    constructor(customerService: ICustomerService) {
-        this._service = customerService;
+class AttendantController {
+    private readonly _service: IAttendantService;
+    constructor(AttendantService: IAttendantService) {
+        this._service = AttendantService;
     }
 
     async list(request: Request, response: Response) {
         try {
-            const customers: CustomerDtoType[] = await this._service.list();
-            const responseJson: ApiJsonResponseListType<CustomerDtoType> = {
-                data: customers,
+            const Attendants: AttendantDtoType[] = await this._service.list();
+            const responseJson: ApiJsonResponseListType<AttendantDtoType> = {
+                data: Attendants,
                 // Still need to set pagination props like offset, limit, etc...
             };
 
@@ -39,13 +39,13 @@ class CustomerController {
     }
 
     async create(request: Request, response: Response) {
-        const data: CustomerType = request.body;
+        const data: AttendantType = request.body;
 
         try {
-            const newCustomer: CustomerDtoType = await this._service.create(data);
-            const responseJson: ApiJsonResponseCreateType<CustomerDtoType> = {
+            const newAttendant: AttendantDtoType = await this._service.create(data);
+            const responseJson: ApiJsonResponseCreateType<AttendantDtoType> = {
                 message: `Conta criada com sucesso.`,
-                data: newCustomer
+                data: newAttendant
             };
 
             return response
@@ -69,9 +69,9 @@ class CustomerController {
         const { id } = request.params;
 
         try {
-            const customer: CustomerDtoType = await this._service.retrieve(id);
-            const responseJson: ApiJsonResponseRetrieveType<CustomerDtoType> = {
-                data: customer
+            const Attendant: AttendantDtoType = await this._service.retrieve(id);
+            const responseJson: ApiJsonResponseRetrieveType<AttendantDtoType> = {
+                data: Attendant
             };
 
             return response
@@ -93,13 +93,13 @@ class CustomerController {
 
     async update(request: Request, response: Response) {
         const { id } = request.params;
-        const data: CustomerType = request.body;
+        const data: AttendantType = request.body;
 
         try {
-            const customer: CustomerDtoType = await this._service.update(id, data);
-            const responseJson: ApiJsonResponseCreateType<CustomerDtoType> = {
+            const Attendant: AttendantDtoType = await this._service.update(id, data);
+            const responseJson: ApiJsonResponseCreateType<AttendantDtoType> = {
                 message: `Dados atualizados com sucesso.`,
-                data: customer
+                data: Attendant
             };
 
             return response
@@ -120,4 +120,4 @@ class CustomerController {
     }
 }
 
-export default CustomerController;
+export default AttendantController;

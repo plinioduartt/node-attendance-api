@@ -85,9 +85,9 @@ describe('Token Entity', () => {
 
     it("should return an error when missing a property", async () => {
         // arrange
-        const MISSED_PROPERTY_SENDED = 'revoked';
+        const MISSED_PROPERTY = 'revoked';
         const MISSED_PROPERTY_EXPECTED = '_revoked';
-        const newToken = await Token.create(omit(TokenData, [MISSED_PROPERTY_SENDED]) as TokenType);
+        const newToken = await Token.create(omit(TokenData, [MISSED_PROPERTY]) as TokenType);
 
         // act
         const { isValid, errors } = newToken.isValidInstance();
