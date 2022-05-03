@@ -4,7 +4,7 @@ import { CustomerType } from "../../../../domain/users/customers/entities/custom
 interface ICustomerService {
     list(): Promise<CustomerDtoType[]>;
     create(data: CustomerType): Promise<CustomerDtoType>;
-    retrieve(id: string): Promise<CustomerDtoType>;
+    retrieve(param: string): Promise<CustomerDtoType>;
     update(id: string, data: CustomerType): Promise<CustomerDtoType>;
 }
 

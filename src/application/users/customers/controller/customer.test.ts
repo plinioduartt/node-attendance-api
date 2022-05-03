@@ -244,7 +244,7 @@ describe("Customer controller EXPECTED ERRORS", () => {
         expect(statusCode).toBe(404);
         expect(json).toHaveProperty('error');
         expect(json.error).toHaveProperty('message');
-        expect(json.error.message).toBe(`No customers found with id ${INVALID_CUSTOMER_ID_FOR_TESTS}.`);
+        expect(json.error.message).toBe(`No customers found with param ${INVALID_CUSTOMER_ID_FOR_TESTS}.`);
     });
 
     it("Update customer ==> Should return an error customer not found", async () => {

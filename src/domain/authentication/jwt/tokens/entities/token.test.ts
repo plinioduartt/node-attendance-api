@@ -1,7 +1,8 @@
 import Token, { TokenType } from './token.entity';
 import { omit } from 'lodash';
-import { AbstractUser } from '@/src/domain/users/abstract-user';
 import { JwtPayload } from 'jsonwebtoken';
+import { AbstractUser } from '@/src/domain/users/abstract-users/entities/abstract-user';
+import { AbstractUserDtoType } from '@/src/infrastructure/users/abstract-users/presenters/mappers/abstract-user.mapper';
 
 jest.setTimeout(50000);
 
@@ -24,7 +25,7 @@ describe('Token Entity', () => {
         };
 
         // act
-        const token = Token.generate(omit(userData, ['password', 'roleId']) as AbstractUser);
+        const token = Token.generate(omit(userData, ['password', 'roleId']) as AbstractUserDtoType);
 
         // asserts
         expect(token).toBeTruthy();
@@ -53,7 +54,7 @@ describe('Token Entity', () => {
         };
 
         // act
-        const token = Token.generate(omit(userData, ['password', 'roleId']) as AbstractUser);
+        const token = Token.generate(omit(userData, ['password', 'roleId']) as AbstractUserDtoType);
         const payload = Token.verify(token) as JwtPayload;
 
         // asserts
@@ -78,7 +79,7 @@ describe('Token Entity', () => {
         expect(newToken).toBeInstanceOf(Token);
         expect(newToken).toHaveProperty('userId');
         expect(newToken).toHaveProperty('accessToken');
-        expect(newToken).toHaveProperty('isRevoked');
+        expect(newToken).toHaveProperty('revoked');
         expect(newToken).toHaveProperty('_revoked');
         expect(newToken).toHaveProperty('expiresIn');
     });

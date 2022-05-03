@@ -4,7 +4,7 @@ import { AttendantType } from "../../../../domain/users/attendants/entities/atte
 interface IAttendantService {
     list(): Promise<AttendantDtoType[]>;
     create(data: AttendantType): Promise<AttendantDtoType>;
-    retrieve(id: string): Promise<AttendantDtoType>;
+    retrieve(param: string): Promise<AttendantDtoType>;
     update(id: string, data: AttendantType): Promise<AttendantDtoType>;
 }
 

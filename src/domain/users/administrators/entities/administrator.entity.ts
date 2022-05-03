@@ -1,7 +1,6 @@
 import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
-import User, { AbstractUser } from "../../abstract-user";
+import User, { AbstractUser } from "../../abstract-users/entities/abstract-user";
 import CustomError from "@/src/http/errors/customError";
-// import roles from "../../enums/roles.enum";
 
 export type AdministratorType = AbstractUser & {
   city: string;
@@ -27,11 +26,21 @@ class Administrator extends User {
       throw new CustomError(400, ERROR_MSG);
     }
 
-    newAdministrator._password = await User.hashPassword(data.password);
+    newAdministrator._password = await Administrator.hashPassword(data.password);
     return newAdministrator;
   }
 
-  isValidInstance(): IsValidInstanceType {
+  static async update(data: AdministratorType): Promise<AdministratorType> {
+    if (!!data.password) {
+      data.password = await Administrator.hashPassword(data.password);
+    }
+
+    // args...
+
+    return data;
+  }
+
+  private isValidInstance(): IsValidInstanceType {
     const propertyNames = Object.getOwnPropertyNames(this);
     const errors = propertyNames
       .map(property => this[property as keyof Administrator] != null ? null : `property ${property} is missing.`)
@@ -45,20 +54,3 @@ class Administrator extends User {
 }
 
 export default Administrator;
-
-// (async () => {
-//   const password = await Administrator.hashPassword('123456');
-
-//   const test = await Administrator.create({
-//     name: 'teste',
-//     email: 'teste',
-//     city: 'teste',
-//     state: 'teste',
-//     roleId: roles.ADMINISTRATOR,
-//     password,
-//   });
-
-//   console.log("Roles enum ==> ", roles);
-//   console.log("Usuário criado ==> ", test);
-//   console.log("Usuário é válido? ==> ", test.isValid());
-// })()

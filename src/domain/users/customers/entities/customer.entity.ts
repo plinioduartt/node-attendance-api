@@ -1,4 +1,4 @@
-import User, { AbstractUser } from "../../abstract-user";
+import User, { AbstractUser } from "../../abstract-users/entities/abstract-user";
 import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
 import CustomError from "@/src/http/errors/customError";
 
@@ -35,7 +35,7 @@ class Customer extends User {
 
   static async update(data: CustomerType): Promise<CustomerType> {
     if (!!data.password) {
-      data.password = await this.hashPassword(data.password);
+      data.password = await Customer.hashPassword(data.password);
     }
 
     return data;

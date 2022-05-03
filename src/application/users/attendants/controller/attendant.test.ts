@@ -244,7 +244,7 @@ describe("Attendant controller EXPECTED ERRORS", () => {
         expect(statusCode).toBe(404);
         expect(json).toHaveProperty('error');
         expect(json.error).toHaveProperty('message');
-        expect(json.error.message).toBe(`No attendants found with id ${INVALID_ATTENDANT_ID_FOR_TESTS}.`);
+        expect(json.error.message).toBe(`No attendants found with param ${INVALID_ATTENDANT_ID_FOR_TESTS}.`);
     });
 
     it("Update Attendant ==> Should return an error Attendant not found", async () => {

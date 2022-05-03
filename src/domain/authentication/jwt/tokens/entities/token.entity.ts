@@ -1,10 +1,9 @@
 import crypto from 'node:crypto';
 import jsonwebtoken, { JwtPayload } from 'jsonwebtoken';
 import IsValidInstanceType from "@/src/domain/users/_commons/types/isValidInstance.type";
-import { AbstractUser } from '@/src/domain/users/abstract-user';
 import CustomError from '@/src/http/errors/customError';
 import tokenErrors from '../errors/token.errors';
-// import { omit } from 'lodash';
+import { AbstractUserDtoType } from '@/src/infrastructure/users/abstract-users/presenters/mappers/abstract-user.mapper';
 
 export type TokenType = {
     id?: string;
@@ -35,7 +34,7 @@ class Token {
         this._revoked = revoked;
     }
 
-    static generate(data: AbstractUser): string {
+    static generate(data: AbstractUserDtoType): string {
         const EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? 60 * 60;
         const JWT_SECRET = process.env.JWT_SECRET ?? '';
 
@@ -87,27 +86,9 @@ class Token {
         return this._expiresIn;
     }
 
-    get isRevoked(): boolean {
+    get revoked(): boolean {
         return this._revoked;
     }
 }
 
 export default Token;
-
-// (async () => {
-//     const data = {
-//         name: 'teste',
-//         email: 'teste',
-//         cpf: 'teste',
-//         city: 'teste',
-//         state: 'teste',
-//     };
-
-//     const token = Token.generate(omit(data, ['password', 'roleId']) as AbstractUser);
-//     console.info(`generated jwt token ==> ${token}`);
-
-//     setTimeout(() => {
-//         const valid = Token.verify(token);
-//         console.info(`valid token ???? ${JSON.stringify(valid)}`);
-//     }, 2000);
-// })()

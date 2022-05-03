@@ -141,7 +141,7 @@ describe('Customer services EXPECTED ERRORS', () => {
         const request = async () => await sut.retrieve(INVALID_ID);
 
         // assert
-        expect(request).rejects.toThrowError(`No customers found with id ${INVALID_ID}.`)
+        expect(request).rejects.toThrowError(`No customers found with param ${INVALID_ID}.`)
     });
 
     it('Update customer: Should return a error customer not found', async () => {

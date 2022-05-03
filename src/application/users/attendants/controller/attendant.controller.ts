@@ -4,8 +4,8 @@ import ApiJsonResponseCreateType from "@/src/http/types/api-responses/api-json-r
 import ApiJsonResponseListType from "@/src/http/types/api-responses/api-json-response-list.type";
 import ApiJsonResponseRetrieveType from "@/src/http/types/api-responses/api-json-response-retrieve.type";
 import { AttendantDtoType } from "@/src/infrastructure/users/attendants/presenters/mappers/attendant.mapper";
-import { Request, Response } from "express";
 import IAttendantService from "../services/attendant.interface";
+import { Request, Response } from "express";
 
 class AttendantController {
     private readonly _service: IAttendantService;

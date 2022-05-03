@@ -21,11 +21,11 @@ class AttendantService implements IAttendantService {
         return newAttendant;
     }
 
-    async retrieve(id: string): Promise<AttendantDtoType> {
-        const attendantFound: AttendantDtoType | undefined = await this._repository.retrieve(id);
+    async retrieve(param: string): Promise<AttendantDtoType> {
+        const attendantFound: AttendantDtoType | undefined = await this._repository.retrieve(param);
 
         if (!attendantFound) {
-            throw new CustomError(404, `No attendants found with id ${id}.`);
+            throw new CustomError(404, `No attendants found with param ${param}.`);
         }
 
         return attendantFound;

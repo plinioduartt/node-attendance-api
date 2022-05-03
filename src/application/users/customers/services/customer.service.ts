@@ -21,11 +21,11 @@ class CustomerService implements ICustomerService {
         return newCustomer;
     }
 
-    async retrieve(id: string): Promise<CustomerDtoType> {
-        const customerFound: CustomerDtoType | undefined = await this._repository.retrieve(id);
+    async retrieve(param: string): Promise<CustomerDtoType> {
+        const customerFound: CustomerDtoType | undefined = await this._repository.retrieve(param);
 
         if (!customerFound) {
-            throw new CustomError(404, `No customers found with id ${id}.`);
+            throw new CustomError(404, `No customers found with param ${param}.`);
         }
 
         return customerFound;

@@ -24,8 +24,8 @@ class AttendantRepository implements IAttendantRepository {
         return mappedAttendant;
     }
 
-    async retrieve(id: string): Promise<AttendantDtoType | undefined> {
-        const Attendant: AttendantDtoType & AttendantType | undefined = this.attendants.find(item => item.id === id);
+    async retrieve(param: string): Promise<AttendantDtoType | undefined> {
+        const Attendant: AttendantDtoType & AttendantType | undefined = this.attendants.find(item => item.id === param || item.email === param);
         if (!!Attendant) {
             const mappedAttendant = await AttendantMapper.domainToDto(Attendant);
             return mappedAttendant;

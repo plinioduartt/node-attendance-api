@@ -12,7 +12,7 @@ function sutFactory() {
     return service;
 }
 
-describe('attendant services', () => {
+describe('Attendant services', () => {
     const sut: AttendantService = sutFactory();
     const DEFAULT_ENTERED_PASSWORD: string = "123456";
     const attendantData: AttendantType = {
@@ -109,7 +109,7 @@ describe('attendant services', () => {
     });
 });
 
-describe('attendant services', () => {
+describe('Attendant services EXPECTED ERRORS', () => {
     const sut: AttendantService = sutFactory();
     const DEFAULT_ENTERED_PASSWORD: string = "123456";
     const attendantData: AttendantType = {
@@ -142,7 +142,7 @@ describe('attendant services', () => {
         const request = async () => await sut.retrieve(INVALID_ID);
 
         // assert
-        expect(request).rejects.toThrowError(`No attendants found with id ${INVALID_ID}.`)
+        expect(request).rejects.toThrowError(`No attendants found with param ${INVALID_ID}.`)
     });
 
     it('Update attendant: Should return a error attendant not found', async () => {

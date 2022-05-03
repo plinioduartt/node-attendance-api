@@ -24,8 +24,8 @@ class CustomerRepository implements ICustomerRepository {
         return mappedCustomer;
     }
 
-    async retrieve(id: string): Promise<CustomerDtoType | undefined> {
-        const customer: CustomerDtoType & CustomerType | undefined = this.customers.find(item => item.id === id);
+    async retrieve(param: string): Promise<CustomerDtoType | undefined> {
+        const customer: CustomerDtoType & CustomerType | undefined = this.customers.find(item => item.id === param || item.email === param);
         if (!!customer) {
             const mappedCustomer = await customerMapper.domainToDto(customer);
             return mappedCustomer;
@@ -41,7 +41,8 @@ class CustomerRepository implements ICustomerRepository {
         };
         const updatedUser = this.customers[index];
         const mappedCustomer = await customerMapper.domainToDto(updatedUser);
-        return mappedCustomer;    }
+        return mappedCustomer;
+    }
 }
 
 export default CustomerRepository;

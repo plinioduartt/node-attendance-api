@@ -1,5 +1,5 @@
 import CustomError from "@/src/http/errors/customError";
-import User, { AbstractUser } from "../../abstract-user";
+import User, { AbstractUser } from "../../abstract-users/entities/abstract-user";
 import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
 
 export type AttendantType = AbstractUser & {
@@ -38,13 +38,13 @@ class Attendant extends User {
       throw new CustomError(400, ERROR_MSG);
     }
 
-    newAttendant._password = await User.hashPassword(data.password);
+    newAttendant._password = await Attendant.hashPassword(data.password);
     return newAttendant;
   }
 
   static async update(data: AttendantType): Promise<AttendantType> {
     if (!!data.password) {
-      data.password = await this.hashPassword(data.password);
+      data.password = await Attendant.hashPassword(data.password);
     }
 
     // rating...

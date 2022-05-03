@@ -1,7 +1,8 @@
 import Customer, { CustomerType } from './customer.entity';
 import { omit } from 'lodash';
 import roles from '../../enums/roles.enum';
-import { CheckPasswordType } from '../../abstract-user';
+import { CheckPasswordType } from '../../abstract-users/entities/abstract-user';
+import customerMapper from '@/src/infrastructure/users/customers/presenters/mappers/customer.mapper';
 
 jest.setTimeout(50000);
 
@@ -50,6 +51,19 @@ describe("Customer Entity", () => {
     expect(newCustomer).toBeTruthy();
     expect(newCustomer).toBeInstanceOf(Customer);
     expect(passwordIsValid).toBeTruthy();
+  });
+
+  it("Customer entity - Map return: Should return a mapped Customer", async () => {
+    // arrange
+    const newCustomer = await Customer.create(customerData);
+
+    // act
+    const mappedCustomer = customerMapper.domainToDto(newCustomer);
+
+    // asserts
+    expect(newCustomer).toBeTruthy();
+    expect(newCustomer).toBeInstanceOf(Customer);
+    expect(mappedCustomer).not.toHaveProperty('_password');
   });
 });
 

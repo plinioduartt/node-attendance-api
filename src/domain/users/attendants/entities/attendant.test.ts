@@ -1,7 +1,8 @@
 import Attendant, { AttendantType } from './attendant.entity';
 import { omit } from 'lodash';
 import roles from '../../enums/roles.enum';
-import { CheckPasswordType } from '../../abstract-user';
+import { CheckPasswordType } from '../../abstract-users/entities/abstract-user';
+import attendantMapper from '@/src/infrastructure/users/attendants/presenters/mappers/attendant.mapper';
 
 jest.setTimeout(50000);
 
@@ -52,9 +53,22 @@ describe("Attendant Entity", () => {
         expect(newAttendant).toBeInstanceOf(Attendant);
         expect(passwordIsValid).toBeTruthy();
     });
+
+    it("Attendant entity - Map return: Should return a mapped attendant", async () => {
+        // arrange
+        const newAttendant = await Attendant.create(attendantData);
+
+        // act
+        const mappedAttendant = attendantMapper.domainToDto(newAttendant);
+
+        // asserts
+        expect(newAttendant).toBeTruthy();
+        expect(newAttendant).toBeInstanceOf(Attendant);
+        expect(mappedAttendant).not.toHaveProperty('_password');
+    });
 });
 
-describe("Attendant Entity", () => {
+describe("Attendant Entity EXPECTED ERRORS", () => {
     const DEFAULT_ENTERED_PASSWORD: string = "123456";
     let attendantData: AttendantType = {
         name: "Test Attendant",
