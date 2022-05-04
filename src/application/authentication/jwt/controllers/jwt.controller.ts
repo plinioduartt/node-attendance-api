@@ -1,8 +1,8 @@
 import ApiJsonErrorType from "@/src/http/types/api-errors/api-error-response.type";
 import ApiJsonResponseCreateType from "@/src/http/types/api-responses/api-json-response-create.type";
-import { TokenDtoType } from "@/src/infrastructure/authentication/jwt/presenters/mappers/jwt.mapper";
 import { Request, Response } from "express";
 import IJwtService, { CredentialsType } from "../services/jwt.interface";
+import { SignInResponseType } from "../services/jwt.service";
 
 class JwtController {
     private readonly _service: IJwtService;
@@ -14,14 +14,14 @@ class JwtController {
         const data: CredentialsType = request.body;
 
         try {
-            const token: TokenDtoType = await this._service.signIn(data);
-            const responseJson: ApiJsonResponseCreateType<TokenDtoType> = {
+            const accessToken: SignInResponseType = await this._service.signIn(data);
+            const responseJson: ApiJsonResponseCreateType<SignInResponseType> = {
                 message: `Autenticado com sucesso.`,
-                data: token
+                data: accessToken
             };
 
             return response
-                .status(201)
+                .status(200)
                 .json(responseJson);
         } catch (error: any) {
             const errorJson: ApiJsonErrorType = {

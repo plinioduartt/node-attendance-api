@@ -2,7 +2,7 @@ import Attendant, { AttendantType } from './attendant.entity';
 import { omit } from 'lodash';
 import roles from '../../enums/roles.enum';
 import { CheckPasswordType } from '../../abstract-users/entities/abstract-user';
-import attendantMapper from '@/src/infrastructure/users/attendants/presenters/mappers/attendant.mapper';
+import AttendantMapper from '@/src/infrastructure/users/attendants/presenters/mappers/attendant.mapper';
 
 jest.setTimeout(50000);
 
@@ -59,7 +59,7 @@ describe("Attendant Entity", () => {
         const newAttendant = await Attendant.create(attendantData);
 
         // act
-        const mappedAttendant = attendantMapper.domainToDto(newAttendant);
+        const mappedAttendant = AttendantMapper.domainToDto(newAttendant);
 
         // asserts
         expect(newAttendant).toBeTruthy();

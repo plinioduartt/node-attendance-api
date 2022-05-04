@@ -1,13 +1,13 @@
 import CustomError from "@/src/http/errors/customError";
 import User, { AbstractUser } from "../../abstract-users/entities/abstract-user";
-import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
+import IsValidInstanceType from "../../../_commons/types/isValidInstance.type";
 
 export type AttendantType = AbstractUser & {
   cpf: string;
   city: string;
   state: string;
   rating?: number;
-  number_of_attendances?: number;
+  attendancesNumber?: number;
 }
 
 class Attendant extends User {
@@ -15,7 +15,7 @@ class Attendant extends User {
   public readonly city: string;
   public readonly state: string;
   public readonly rating: number;
-  public readonly number_of_attendances: number;
+  public readonly attendancesNumber: number;
 
   private constructor({ cpf, city, state, rating, ...args }: AttendantType) {
     super(args);
@@ -24,9 +24,9 @@ class Attendant extends User {
     this.state = state;
 
     const DEFAULT_INITIAL_RATING = 10;
-    const DEFAULT_INITIAL_NUMBER_OF_ATTENDANCES = 0;
+    const DEFAULT_INITIAL_ATTENDANCES_NUMBER = 0;
     this.rating = DEFAULT_INITIAL_RATING;
-    this.number_of_attendances = DEFAULT_INITIAL_NUMBER_OF_ATTENDANCES;
+    this.attendancesNumber = DEFAULT_INITIAL_ATTENDANCES_NUMBER;
   }
 
   static async create(data: AttendantType): Promise<Attendant> {

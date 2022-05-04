@@ -46,7 +46,9 @@ const attendants: AttendantType[] = [
     city: 'Paulínia',
     state: 'SP',
     roleId: '3',
-    password: DEFAULT_123456_PASSWORD
+    password: DEFAULT_123456_PASSWORD,
+    attendancesNumber: 10,
+    rating: 9.5
   },
   {
     id: '987cc239a814e93465aaa470',
@@ -56,7 +58,9 @@ const attendants: AttendantType[] = [
     city: 'Paulínia',
     state: 'SP',
     roleId: '3',
-    password: DEFAULT_123456_PASSWORD
+    password: DEFAULT_123456_PASSWORD,
+    attendancesNumber: undefined,
+    rating: undefined
   }
 ];
 

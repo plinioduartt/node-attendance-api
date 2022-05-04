@@ -13,7 +13,7 @@ export type AbstractUserDtoType = {
 }
 
 const AbstractUserMapper = {
-    domainToDto: async (data: AdministratorType | AttendantType | CustomerType): Promise<AbstractUserDtoType> => {
+    domainToDto: (data: AdministratorType | AttendantType | CustomerType): AbstractUserDtoType => {
         const result: AbstractUserDtoType = {
             id: data.id,
             name: data.name,

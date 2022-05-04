@@ -10,7 +10,7 @@ export type AdministratorDtoType = {
 }
 
 const AdministratorMapper = {
-    domainToDto: async (data: AdministratorType): Promise<AdministratorDtoType> => {
+    domainToDto: (data: AdministratorType): AdministratorDtoType => {
         const result: AdministratorDtoType = {
             id: data.id,
             name: data.name,

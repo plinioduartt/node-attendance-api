@@ -1,4 +1,4 @@
-import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
+import IsValidInstanceType from "../../../_commons/types/isValidInstance.type";
 import User, { AbstractUser } from "../../abstract-users/entities/abstract-user";
 import CustomError from "@/src/http/errors/customError";
 

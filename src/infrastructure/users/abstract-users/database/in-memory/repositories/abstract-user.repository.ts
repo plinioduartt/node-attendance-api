@@ -23,7 +23,7 @@ class AbstractUserRepository implements IAbstractUserRepository {
                 .find(item => item.id === param || item.email === param);
 
         if (!!abstractUser) {
-            const mappedAbstractUser: AbstractUserDtoType = await AbstractUserMapper
+            const mappedAbstractUser: AbstractUserDtoType = AbstractUserMapper
                 .domainToDto(abstractUser);
             return mappedAbstractUser;
         }

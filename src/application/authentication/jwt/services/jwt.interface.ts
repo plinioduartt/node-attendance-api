@@ -1,4 +1,4 @@
-import { TokenDtoType } from "@/src/infrastructure/authentication/jwt/presenters/mappers/jwt.mapper";
+import { SignInResponseType } from "./jwt.service";
 
 export type CredentialsType = {
     email: string;
@@ -6,7 +6,7 @@ export type CredentialsType = {
 };
 
 interface IJwtService {
-    signIn(credentials: CredentialsType): Promise<TokenDtoType>;
+    signIn(credentials: CredentialsType): Promise<SignInResponseType>;
     signOut(): Promise<void>;
 }
 

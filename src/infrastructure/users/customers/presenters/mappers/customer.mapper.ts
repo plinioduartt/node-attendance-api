@@ -12,7 +12,7 @@ export type CustomerDtoType = {
 }
 
 const customerMapper = {
-    domainToDto: async (data: CustomerType): Promise<CustomerDtoType> => {
+    domainToDto: (data: CustomerType): CustomerDtoType => {
         const result: CustomerDtoType = {
             id: data.id,
             name: data.name,

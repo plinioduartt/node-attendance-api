@@ -1,7 +1,7 @@
 import Attendant, { AttendantType } from "@/src/domain/users/attendants/entities/attendant.entity";
 import roles from "@/src/domain/users/enums/roles.enum";
 import AttendantRepository from "@/src/infrastructure/users/attendants/database/in-memory/repositories/attendant.repository";
-import attendantMapper, { AttendantDtoType } from "@/src/infrastructure/users/attendants/presenters/mappers/attendant.mapper";
+import AttendantMapper, { AttendantDtoType } from "@/src/infrastructure/users/attendants/presenters/mappers/attendant.mapper";
 import mockedUsers from "@/src/mock/users/users-list.mock";
 import AttendantService from "./attendant.service";
 import { omit } from "lodash";
@@ -37,6 +37,7 @@ describe('Attendant services', () => {
         expect(newattendant).toHaveProperty('cpf');
         expect(newattendant).toHaveProperty('email');
         expect(newattendant).not.toHaveProperty('_password');
+        expect(newattendant).not.toHaveProperty('password');
     });
 
     it('Retrieve attendant: Should return a specific attendant by id', async () => {
@@ -53,6 +54,7 @@ describe('Attendant services', () => {
         expect(attendant).toHaveProperty('cpf');
         expect(attendant).toHaveProperty('email');
         expect(attendant).not.toHaveProperty('_password');
+        expect(attendant).not.toHaveProperty('password');
     });
 
     it('List attendants: Should return attendants list', async () => {
@@ -67,6 +69,7 @@ describe('Attendant services', () => {
         expect(attendants[0]).toHaveProperty('cpf');
         expect(attendants[0]).toHaveProperty('email');
         expect(attendants[0]).not.toHaveProperty('_password');
+        expect(attendants[0]).not.toHaveProperty('password');
     });
 
     it('Update attendant: Should return an updated user', async () => {
@@ -87,6 +90,7 @@ describe('Attendant services', () => {
         expect(response).toHaveProperty('cpf');
         expect(response).toHaveProperty('email');
         expect(response).not.toHaveProperty('_password');
+        expect(response).not.toHaveProperty('password');
         expect(response).toHaveProperty('roleId');
         expect(response).toHaveProperty('city');
         expect(response).toHaveProperty('state');
@@ -99,13 +103,14 @@ describe('Attendant services', () => {
         const newAttendant: Attendant = await Attendant.create(attendantData);
 
         // act
-        const mappedAttendant: AttendantDtoType = await attendantMapper.domainToDto(newAttendant);
+        const mappedAttendant: AttendantDtoType = AttendantMapper.domainToDto(newAttendant);
 
         // asserts
         expect(newAttendant).toBeTruthy();
         expect(newAttendant).toBeInstanceOf(Attendant);
         expect(mappedAttendant).toHaveProperty('cpf');
         expect(mappedAttendant).not.toHaveProperty('_password');
+        expect(mappedAttendant).not.toHaveProperty('password');
     });
 });
 

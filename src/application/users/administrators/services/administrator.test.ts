@@ -35,6 +35,7 @@ describe('Administrator services', () => {
         expect(newAdministrator).toHaveProperty('name');
         expect(newAdministrator).toHaveProperty('email');
         expect(newAdministrator).not.toHaveProperty('_password');
+        expect(newAdministrator).not.toHaveProperty('password');
     });
 
     it('Retrieve Administrator: Should return a specific Administrator by id', async () => {
@@ -50,6 +51,7 @@ describe('Administrator services', () => {
         expect(Administrator).toHaveProperty('name');
         expect(Administrator).toHaveProperty('email');
         expect(Administrator).not.toHaveProperty('_password');
+        expect(Administrator).not.toHaveProperty('password');
     });
 
     it('List Administrators: Should return Administrators list', async () => {
@@ -63,6 +65,7 @@ describe('Administrator services', () => {
         expect(administrators[0]).toHaveProperty('name');
         expect(administrators[0]).toHaveProperty('email');
         expect(administrators[0]).not.toHaveProperty('_password');
+        expect(administrators[0]).not.toHaveProperty('password');
     });
 
     it('Update Administrator: Should return an updated user', async () => {
@@ -81,6 +84,7 @@ describe('Administrator services', () => {
         expect(response).toHaveProperty('name');
         expect(response).toHaveProperty('email');
         expect(response).not.toHaveProperty('_password');
+        expect(response).not.toHaveProperty('password');
         expect(response).toHaveProperty('roleId');
         expect(response).toHaveProperty('city');
         expect(response).toHaveProperty('state');
@@ -92,12 +96,13 @@ describe('Administrator services', () => {
         const newAdministrator: Administrator = await Administrator.create(administratorData);
 
         // act
-        const mappedAdministrator: AdministratorDtoType = await AdministratorMapper.domainToDto(newAdministrator);
+        const mappedAdministrator: AdministratorDtoType = AdministratorMapper.domainToDto(newAdministrator);
 
         // asserts
         expect(newAdministrator).toBeTruthy();
         expect(newAdministrator).toBeInstanceOf(Administrator);
         expect(mappedAdministrator).not.toHaveProperty('_password');
+        expect(mappedAdministrator).not.toHaveProperty('password');
     });
 });
 

@@ -1,26 +1,25 @@
 import IAbstractUserService from "@/src/application/users/abstract-users/services/abstract-user.interface";
 import Token from "@/src/domain/authentication/jwt/tokens/entities/token.entity";
-import IJwtRepository from "@/src/domain/authentication/jwt/tokens/repository/jwt.repository";
 import User from "@/src/domain/users/abstract-users/entities/abstract-user";
 import CustomError from "@/src/http/errors/customError";
-import { TokenDtoType } from "@/src/infrastructure/authentication/jwt/presenters/mappers/jwt.mapper";
 import { AbstractUserDtoType } from "@/src/infrastructure/users/abstract-users/presenters/mappers/abstract-user.mapper";
 import IJwtService, { CredentialsType } from "./jwt.interface";
 
 type InjectTypes = {
     service: IAbstractUserService;
-    repository: IJwtRepository
+}
+
+export type SignInResponseType = {
+    accessToken: string;
 }
 
 class JwtService implements IJwtService {
     private _abstractUserService: IAbstractUserService;
-    private _repository: IJwtRepository;
-    constructor({ service, repository }: InjectTypes) {
+    constructor({ service }: InjectTypes) {
         this._abstractUserService = service;
-        this._repository = repository;
     }
 
-    async signIn(credentials: CredentialsType): Promise<TokenDtoType> {
+    async signIn(credentials: CredentialsType): Promise<SignInResponseType> {
         const userFound: AbstractUserDtoType = await this._abstractUserService
             .retrieve(credentials.email);
 
@@ -38,14 +37,7 @@ class JwtService implements IJwtService {
         }
 
         const accessToken: string = Token.generate(userFound);
-        const newTokenInstance: Token = await Token.create({
-            userId: userFound.id ?? 'invalidID',
-            accessToken,
-            expiresIn: Number(process.env.JWT_EXPIRES_IN) ?? 60 * 60,
-            revoked: false
-        });
-        const newToken: TokenDtoType = await this._repository.create(newTokenInstance);
-        return newToken;
+        return { accessToken };
     }
 
     async signOut(): Promise<void> {

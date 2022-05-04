@@ -11,7 +11,15 @@ class CustomerRepository implements ICustomerRepository {
     public customers: CustomerType[] = mockedUsers.customers;
 
     async list(): Promise<CustomerDtoType[]> {
-        return this.customers;
+        let mappedCustomers: CustomerDtoType[] = [];
+
+        for await (const customer of this.customers) {
+            const mappedCustomer: CustomerDtoType = customerMapper
+                .domainToDto(customer);
+            mappedCustomers.push(mappedCustomer);
+        }
+
+        return mappedCustomers;
     }
 
     async create(data: CustomerType): Promise<CustomerDtoType> {
@@ -20,14 +28,14 @@ class CustomerRepository implements ICustomerRepository {
 
         // Adapter:Converting the internal data type to an http external data type that clients expects
         // map the properties of the customer as dto
-        const mappedCustomer = await customerMapper.domainToDto(data);
+        const mappedCustomer = customerMapper.domainToDto(data);
         return mappedCustomer;
     }
 
     async retrieve(param: string): Promise<CustomerDtoType | undefined> {
-        const customer: CustomerDtoType & CustomerType | undefined = this.customers.find(item => item.id === param || item.email === param);
+        const customer: CustomerType | undefined = this.customers.find(item => item.id === param || item.email === param);
         if (!!customer) {
-            const mappedCustomer = await customerMapper.domainToDto(customer);
+            const mappedCustomer: CustomerDtoType = customerMapper.domainToDto(customer);
             return mappedCustomer;
         }
         return customer;
@@ -40,7 +48,7 @@ class CustomerRepository implements ICustomerRepository {
             ...data
         };
         const updatedUser = this.customers[index];
-        const mappedCustomer = await customerMapper.domainToDto(updatedUser);
+        const mappedCustomer = customerMapper.domainToDto(updatedUser);
         return mappedCustomer;
     }
 }

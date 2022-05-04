@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test node node_modules/jest/bin/jest.js",
-    "dev": "npx nodemon -r dotenv/config -r tsconfig-paths/register ./src/domain/users/customers/entities/customer.entity.ts"
+    "dev": "npx nodemon -r dotenv/config -r tsconfig-paths/register ./src/index.ts"
   },
   "keywords": [],
   "author": "",

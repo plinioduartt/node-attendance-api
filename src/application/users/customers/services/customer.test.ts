@@ -37,6 +37,7 @@ describe('Customer services', () => {
         expect(newCustomer).toHaveProperty('nickname');
         expect(newCustomer).toHaveProperty('email');
         expect(newCustomer).not.toHaveProperty('_password');
+        expect(newCustomer).not.toHaveProperty('password');
     });
 
     it('Retrieve customer: Should return a specific customer by id', async () => {
@@ -53,6 +54,7 @@ describe('Customer services', () => {
         expect(customer).toHaveProperty('nickname');
         expect(customer).toHaveProperty('email');
         expect(customer).not.toHaveProperty('_password');
+        expect(customer).not.toHaveProperty('password');
     });
 
     it('List customers: Should return customers list', async () => {
@@ -67,6 +69,7 @@ describe('Customer services', () => {
         expect(customers[0]).toHaveProperty('nickname');
         expect(customers[0]).toHaveProperty('email');
         expect(customers[0]).not.toHaveProperty('_password');
+        expect(customers[0]).not.toHaveProperty('password');
     });
 
     it('Update customer: Should return an updated user', async () => {
@@ -87,6 +90,7 @@ describe('Customer services', () => {
         expect(response).toHaveProperty('nickname');
         expect(response).toHaveProperty('email');
         expect(response).not.toHaveProperty('_password');
+        expect(response).not.toHaveProperty('password');
         expect(response).toHaveProperty('roleId');
         expect(response).toHaveProperty('city');
         expect(response).toHaveProperty('state');
@@ -99,12 +103,13 @@ describe('Customer services', () => {
         const newCustomer: Customer = await Customer.create(customerData);
 
         // act
-        const mappedCustomer: CustomerDtoType = await customerMapper.domainToDto(newCustomer);
+        const mappedCustomer: CustomerDtoType = customerMapper.domainToDto(newCustomer);
 
         // asserts
         expect(newCustomer).toBeTruthy();
         expect(newCustomer).toBeInstanceOf(Customer);
         expect(mappedCustomer).not.toHaveProperty('_password');
+        expect(mappedCustomer).not.toHaveProperty('password');
     });
 });
 

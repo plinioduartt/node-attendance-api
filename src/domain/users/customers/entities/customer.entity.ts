@@ -1,5 +1,5 @@
 import User, { AbstractUser } from "../../abstract-users/entities/abstract-user";
-import IsValidInstanceType from "../../_commons/types/isValidInstance.type";
+import IsValidInstanceType from "../../../_commons/types/isValidInstance.type";
 import CustomError from "@/src/http/errors/customError";
 
 export type CustomerType = AbstractUser & {

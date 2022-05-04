@@ -8,11 +8,12 @@ export type AttendantDtoType = {
     city: string;
     state: string;
     roleId: string;
-    rating?: number | undefined;
+    rating: number | null;
+    attendancesNumber: number | null;
 }
 
-const attendantMapper = {
-    domainToDto: async (data: AttendantType): Promise<AttendantDtoType> => {
+const AttendantMapper = {
+    domainToDto: (data: AttendantType): AttendantDtoType => {
         const result: AttendantDtoType = {
             id: data.id,
             name: data.name,
@@ -21,11 +22,12 @@ const attendantMapper = {
             city: data.city,
             state: data.state,
             roleId: data.roleId,
-            rating: data.rating
+            rating: data.rating ?? null,
+            attendancesNumber: data.attendancesNumber ?? null
         };
 
         return result;
     }
 }
 
-export default attendantMapper;
+export default AttendantMapper;

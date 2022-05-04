@@ -11,7 +11,15 @@ class AttendantRepository implements IAttendantRepository {
     public attendants: AttendantType[] = mockedUsers.attendants;
 
     async list(): Promise<AttendantDtoType[]> {
-        return this.attendants;
+        let mappedAttendants: AttendantDtoType[] = [];
+
+        for await (const attendant of this.attendants) {
+            const mappedAttendant: AttendantDtoType = AttendantMapper
+                .domainToDto(attendant);
+            mappedAttendants.push(mappedAttendant);
+        }
+
+        return mappedAttendants;
     }
 
     async create(data: AttendantType): Promise<AttendantDtoType> {
@@ -20,14 +28,14 @@ class AttendantRepository implements IAttendantRepository {
 
         // Adapter:Converting the internal data type to an http external data type that clients expects
         // map the properties of the Attendant as dto
-        const mappedAttendant = await AttendantMapper.domainToDto(data);
+        const mappedAttendant = AttendantMapper.domainToDto(data);
         return mappedAttendant;
     }
 
     async retrieve(param: string): Promise<AttendantDtoType | undefined> {
-        const Attendant: AttendantDtoType & AttendantType | undefined = this.attendants.find(item => item.id === param || item.email === param);
+        const Attendant: AttendantType | undefined = this.attendants.find(item => item.id === param || item.email === param);
         if (!!Attendant) {
-            const mappedAttendant = await AttendantMapper.domainToDto(Attendant);
+            const mappedAttendant: AttendantDtoType = AttendantMapper.domainToDto(Attendant);
             return mappedAttendant;
         }
         return Attendant;
@@ -40,8 +48,9 @@ class AttendantRepository implements IAttendantRepository {
             ...data
         };
         const updatedUser = this.attendants[index];
-        const mappedAttendant = await AttendantMapper.domainToDto(updatedUser);
-        return mappedAttendant;    }
+        const mappedAttendant = AttendantMapper.domainToDto(updatedUser);
+        return mappedAttendant;
+    }
 }
 
 export default AttendantRepository;

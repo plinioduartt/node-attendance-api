@@ -1,17 +1,14 @@
 import AbstractUserService from "@/src/application/users/abstract-users/services/abstract-user.service";
-import JwtRepository from "@/src/infrastructure/authentication/jwt/database/in-memory/repositories/jwt.repository";
 import AbstractUserRepository from "@/src/infrastructure/users/abstract-users/database/in-memory/repositories/abstract-user.repository";
 import { CredentialsType } from "./jwt.interface";
-import JwtService from "./jwt.service";
+import JwtService, { SignInResponseType } from "./jwt.service";
 
 jest.setTimeout(50000);
 
 function sutFactory() {
-    const tokenRepository: JwtRepository = new JwtRepository();
     const abstractUserRepository = new AbstractUserRepository();
     const abstractUserService: AbstractUserService = new AbstractUserService(abstractUserRepository);
     const service: JwtService = new JwtService({
-        repository: tokenRepository,
         service: abstractUserService
     });
     return service;
@@ -28,15 +25,11 @@ describe('JWT Services', () => {
         // arrange
 
         // act
-        const response = await sut.signIn(credentials);
+        const response: SignInResponseType = await sut.signIn(credentials);
 
         // assertions
         expect(response).toBeTruthy();
-        expect(response).toHaveProperty('id');
-        expect(response).toHaveProperty('userId');
         expect(response).toHaveProperty('accessToken');
-        expect(response).toHaveProperty('expiresIn');
-        expect(response).toHaveProperty('revoked');
     });
 });
 

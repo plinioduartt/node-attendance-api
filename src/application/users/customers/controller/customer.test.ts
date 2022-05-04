@@ -69,6 +69,7 @@ describe("Customer controller", () => {
         expect(json.data).toHaveProperty('nickname');
         expect(json.data).toHaveProperty('email');
         expect(json.data).not.toHaveProperty('_password');
+        expect(json.data).not.toHaveProperty('password');
         expect(json.data).toHaveProperty('roleId');
         expect(json.data).toHaveProperty('city');
         expect(json.data).toHaveProperty('state');
@@ -109,6 +110,7 @@ describe("Customer controller", () => {
         expect(json.data).toHaveProperty('nickname');
         expect(json.data).toHaveProperty('email');
         expect(json.data).not.toHaveProperty('_password');
+        expect(json.data).not.toHaveProperty('password');
         expect(json.data).toHaveProperty('roleId');
         expect(json.data).toHaveProperty('city');
         expect(json.data).toHaveProperty('state');
@@ -148,6 +150,7 @@ describe("Customer controller", () => {
         expect(json.data[0]).toHaveProperty('nickname');
         expect(json.data[0]).toHaveProperty('email');
         expect(json.data[0]).not.toHaveProperty('_password');
+        expect(json.data[0]).not.toHaveProperty('password');
         expect(json.data[0]).toHaveProperty('roleId');
         expect(json.data[0]).toHaveProperty('city');
         expect(json.data[0]).toHaveProperty('state');
@@ -194,6 +197,7 @@ describe("Customer controller", () => {
         expect(json.data).toHaveProperty('nickname');
         expect(json.data).toHaveProperty('email');
         expect(json.data).not.toHaveProperty('_password');
+        expect(json.data).not.toHaveProperty('password');
         expect(json.data).toHaveProperty('roleId');
         expect(json.data).toHaveProperty('city');
         expect(json.data).toHaveProperty('state');
