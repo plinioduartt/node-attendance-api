@@ -1,21 +1,21 @@
 import AbstractUserService from "@/src/application/users/abstract-users/services/abstract-user.service";
 import AbstractUserRepository from "@/src/infrastructure/users/abstract-users/database/in-memory/repositories/abstract-user.repository";
-import { CredentialsType } from "./jwt.interface";
-import JwtService, { SignInResponseType } from "./jwt.service";
+import { CredentialsType } from "./auth.interface";
+import AuthService, { SignInResponseType } from "./auth.service";
 
 jest.setTimeout(50000);
 
 function sutFactory() {
     const abstractUserRepository = new AbstractUserRepository();
     const abstractUserService: AbstractUserService = new AbstractUserService(abstractUserRepository);
-    const service: JwtService = new JwtService({
+    const service: AuthService = new AuthService({
         service: abstractUserService
     });
     return service;
 }
 
-describe('JWT Services', () => {
-    const sut: JwtService = sutFactory();
+describe('Auth Services', () => {
+    const sut: AuthService = sutFactory();
     const credentials: CredentialsType = {
         email: 'teste@gmail.com',
         password: '123456'
@@ -33,8 +33,8 @@ describe('JWT Services', () => {
     });
 });
 
-describe('JWT Services EXPECTED ERRORS', () => {
-    const sut: JwtService = sutFactory();
+describe('Auth Services EXPECTED ERRORS', () => {
+    const sut: AuthService = sutFactory();
     const credentials: CredentialsType = {
         email: 'teste@gmail.com',
         password: 'invalidCredentials' // where valids corresponds to "123456" in this tests case

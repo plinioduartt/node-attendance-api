@@ -6,14 +6,14 @@ import customersRouter from "../routes/users/customers.route";
 
 const routes: Router = express.Router();
 
+routes.use(express.json());
+
 routes.use([
     administratorsRouter,
     attendantsRouter,
     customersRouter,
     attendancesRouter
 ]);
-
-routes.use(express.json());
 
 console.info('All routes has been initialized succesfully.');
 

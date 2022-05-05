@@ -2,6 +2,7 @@ import CustomError from '@/src/http/errors/customError';
 import { AttendanceDtoType } from '@/src/infrastructure/attendances/presenters/mappers/attendance.mapper';
 import { AttendantDtoType } from '@/src/infrastructure/users/attendants/presenters/mappers/attendant.mapper';
 import { CustomerDtoType } from '@/src/infrastructure/users/customers/presenters/mappers/customer.mapper';
+import IMailerService, { MailDataType } from '@/src/utils/mailer/mailer.interface';
 import crypto from 'node:crypto';
 import IsValidInstanceType from '../../_commons/types/isValidInstance.type';
 import attendanceEnums from '../enums/attendance.enum';
@@ -58,10 +59,32 @@ class Attendance {
         return newAttendance;
     }
 
-    static async close(data: AttendanceDtoType): Promise<void> {
-        // send email with the resume of attendance
+    static async close(mailer: IMailerService, data: AttendanceDtoType): Promise<void> {
+        const html = `
+        <html>
+        <head>
+            <title>Href Attribute Example</title>
+        </head>
+        <body>
+            <h1>Href Attribute Example</h1>
+            <p>
+            <a href="https://www.freecodecamp.org/contribute/">The freeCodeCamp Contribution Page</a> shows you how and where you can contribute to freeCodeCamp's community and growth.
+            </p>
+        </body>
+        </html>
+        `
 
-        return
+        const emailData: MailDataType = {
+            from: "atendeai@gmail.com",
+            to: data.customer.email ?? "",
+            cc: "plinio.desenvolvimento@gmail.com",
+            subject: "Histórico do seu atendimento",
+            text: "Histórico do seu atendimento",
+            html
+        };
+
+        await mailer.send(emailData);
+        return;
     }
 
     static async writeMessage(data: MessageType): Promise<Message> {

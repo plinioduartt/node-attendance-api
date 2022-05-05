@@ -6,7 +6,7 @@ import { AbstractUserDtoType } from '@/src/infrastructure/users/abstract-users/p
 abstract class Token {
     private constructor() { }
 
-    static generate(data: AbstractUserDtoType): string {
+    static generate(data: Partial<AbstractUserDtoType>): string {
         const EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? 60 * 60;
         const JWT_SECRET = process.env.JWT_SECRET ?? '';
 
@@ -29,7 +29,7 @@ abstract class Token {
             return jsonwebtoken.verify(token, JWT_SECRET) as JwtPayload;
         } catch (error) {
             if (error instanceof jsonwebtoken.JsonWebTokenError) {
-                throw new CustomError(401, tokenErrors[error.message] ?? 'Unexpected error while verifying jwt token.');
+                throw new CustomError(401, tokenErrors[error.message] ?? 'Invalid token.');
             }
         }
     }

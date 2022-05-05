@@ -3,7 +3,8 @@ import Token from "@/src/domain/authentication/jwt/tokens/entities/token.entity"
 import User from "@/src/domain/users/abstract-users/entities/abstract-user";
 import CustomError from "@/src/http/errors/customError";
 import { AbstractUserDtoType } from "@/src/infrastructure/users/abstract-users/presenters/mappers/abstract-user.mapper";
-import IJwtService, { CredentialsType } from "./jwt.interface";
+import { omit } from "lodash";
+import IAuthService, { CredentialsType } from "./auth.interface";
 
 type InjectTypes = {
     service: IAbstractUserService;
@@ -13,7 +14,7 @@ export type SignInResponseType = {
     accessToken: string;
 }
 
-class JwtService implements IJwtService {
+class AuthService implements IAuthService {
     private _abstractUserService: IAbstractUserService;
     constructor({ service }: InjectTypes) {
         this._abstractUserService = service;
@@ -36,7 +37,7 @@ class JwtService implements IJwtService {
             throw new CustomError(401, `Invalid credentials.`);
         }
 
-        const accessToken: string = Token.generate(userFound);
+        const accessToken: string = Token.generate(omit(userFound, ['password']));
         return { accessToken };
     }
 
@@ -45,4 +46,4 @@ class JwtService implements IJwtService {
     }
 }
 
-export default JwtService;
+export default AuthService;

@@ -3,7 +3,7 @@ type TokenErrorsType = {
 }
 
 const tokenErrors: TokenErrorsType = {
-    'jwt expired': "Token expirado."
+    'jwt expired': "Expired token."
 }
 
 export default tokenErrors;

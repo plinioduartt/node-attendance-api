@@ -3,22 +3,22 @@ import ApiJsonErrorType from "@/src/http/types/api-errors/api-error-response.typ
 import ApiJsonResponseCreateType from "@/src/http/types/api-responses/api-json-response-create.type";
 import AbstractUserRepository from "@/src/infrastructure/users/abstract-users/database/in-memory/repositories/abstract-user.repository";
 import { Request, Response } from "express";
-import { CredentialsType } from "../services/jwt.interface";
-import JwtService, { SignInResponseType } from "../services/jwt.service";
-import JwtController from "./jwt.controller";
+import { CredentialsType } from "../services/auth.interface";
+import AuthService, { SignInResponseType } from "../services/auth.service";
+import AuthController from "./auth.controller";
 
 jest.setTimeout(50000);
 
 function sutFactory() {
     const abstractUserRepository = new AbstractUserRepository();
     const abstractUserService = new AbstractUserService(abstractUserRepository);
-    const service = new JwtService({
+    const service = new AuthService({
         service: abstractUserService
     });
-    return new JwtController(service);
+    return new AuthController(service);
 }
-describe("JWT Controller", () => {
-    const sut: JwtController = sutFactory();
+describe("Auth Controller", () => {
+    const sut: AuthController = sutFactory();
 
     afterEach(() => {
         jest.clearAllMocks();
@@ -41,11 +41,11 @@ describe("JWT Controller", () => {
             status: jest.fn()
                 .mockReturnValue((code: number) => code)
                 .mockReturnThis()
-                .mockName('JwtController:SignIn() ->  Mock response status function'),
+                .mockName('TokenController:SignIn() ->  Mock response status function'),
             json: jest.fn()
                 .mockReturnValue((data: unknown) => data)
                 .mockReturnThis()
-                .mockName('JwtController:SignIn() ->  Mock response json function')
+                .mockName('TokenController:SignIn() ->  Mock response json function')
         }
 
         // act
@@ -62,8 +62,8 @@ describe("JWT Controller", () => {
     });
 });
 
-describe("JWT Controller EXPECTED ERRORS", () => {
-    const sut: JwtController = sutFactory();
+describe("Auth Controller EXPECTED ERRORS", () => {
+    const sut: AuthController = sutFactory();
 
     afterEach(() => {
         jest.clearAllMocks();
@@ -86,11 +86,11 @@ describe("JWT Controller EXPECTED ERRORS", () => {
             status: jest.fn()
                 .mockReturnValue((code: number) => code)
                 .mockReturnThis()
-                .mockName('JwtController:SignIn() ->  Mock response status function'),
+                .mockName('TokenController:SignIn() ->  Mock response status function'),
             json: jest.fn()
                 .mockReturnValue((data: unknown) => data)
                 .mockReturnThis()
-                .mockName('JwtController:SignIn() ->  Mock response json function')
+                .mockName('TokenController:SignIn() ->  Mock response json function')
         }
 
         // act

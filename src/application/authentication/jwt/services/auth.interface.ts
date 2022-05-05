@@ -1,13 +1,13 @@
-import { SignInResponseType } from "./jwt.service";
+import { SignInResponseType } from "./auth.service";
 
 export type CredentialsType = {
     email: string;
     password: string;
 };
 
-interface IJwtService {
+interface IAuthService {
     signIn(credentials: CredentialsType): Promise<SignInResponseType>;
     signOut(): Promise<void>;
 }
 
-export default IJwtService;
+export default IAuthService;

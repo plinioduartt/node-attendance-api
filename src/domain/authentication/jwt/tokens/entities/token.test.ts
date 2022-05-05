@@ -35,8 +35,8 @@ describe('Token Entity', () => {
         };
 
         // act
-        const token = Token.generate(omit(userData, ['password', 'roleId']) as AbstractUserDtoType);
-        const payload = Token.verify(token) as JwtPayload;
+        const token: string = Token.generate(omit(userData, ['password', 'roleId']) as AbstractUserDtoType);
+        const payload: JwtPayload = Token.verify(token) as JwtPayload;
 
         // asserts
         expect(token).toBeTruthy();
@@ -58,6 +58,6 @@ describe('Token Entity EXPECTED ERRORS', () => {
         const request = () => Token.verify(expiredToken);
 
         // asserts
-        expect(request).toThrowError('Token expirado.');
+        expect(request).toThrowError('Expired token.');
     });
 });

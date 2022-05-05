@@ -1,6 +1,7 @@
 import { AdministratorType } from "@/src/domain/users/administrators/entities/administrator.entity";
 import { AttendantType } from "@/src/domain/users/attendants/entities/attendant.entity";
 import { CustomerType } from "@/src/domain/users/customers/entities/customer.entity";
+import roles from "@/src/domain/users/enums/roles.enum";
 
 const DEFAULT_123456_PASSWORD = '$2a$12$yUh714g31SHCPfids75lHOOr9CAsRbjK4z5a2ejv2rJXjMVtC6N3S';
 
@@ -12,7 +13,7 @@ const customers: CustomerType[] = [
     nickname: 'Teste',
     city: 'Paulínia',
     state: 'SP',
-    roleId: '3',
+    roleId: roles.CUSTOMER,
     password: DEFAULT_123456_PASSWORD
   },
   {
@@ -22,7 +23,7 @@ const customers: CustomerType[] = [
     nickname: 'Teste',
     city: 'Paulínia',
     state: 'SP',
-    roleId: '3',
+    roleId: roles.CUSTOMER,
     password: DEFAULT_123456_PASSWORD
   },
   {
@@ -32,7 +33,7 @@ const customers: CustomerType[] = [
     nickname: 'Teste',
     city: 'Paulínia',
     state: 'SP',
-    roleId: '3',
+    roleId: roles.CUSTOMER,
     password: DEFAULT_123456_PASSWORD
   },
 ];
@@ -45,7 +46,7 @@ const attendants: AttendantType[] = [
     cpf: '12345678900',
     city: 'Paulínia',
     state: 'SP',
-    roleId: '3',
+    roleId: roles.ATTENDANT,
     password: DEFAULT_123456_PASSWORD,
     attendancesNumber: 10,
     rating: 9.5
@@ -57,7 +58,7 @@ const attendants: AttendantType[] = [
     cpf: '12345678900',
     city: 'Paulínia',
     state: 'SP',
-    roleId: '3',
+    roleId: roles.ATTENDANT,
     password: DEFAULT_123456_PASSWORD,
     attendancesNumber: undefined,
     rating: undefined
@@ -71,7 +72,7 @@ const administrators: AdministratorType[] = [
     email: 'teste@gmail.com',
     city: 'Paulínia',
     state: 'SP',
-    roleId: '3',
+    roleId: roles.ADMINISTRATOR,
     password: DEFAULT_123456_PASSWORD
   },
   {
@@ -80,7 +81,7 @@ const administrators: AdministratorType[] = [
     email: 'teste2@gmail.com',
     city: 'Paulínia',
     state: 'SP',
-    roleId: '3',
+    roleId: roles.ADMINISTRATOR,
     password: DEFAULT_123456_PASSWORD
   }
 ];

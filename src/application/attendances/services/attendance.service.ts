@@ -5,6 +5,7 @@ import IAttendanceRepository from "@/src/domain/attendances/repositories/attenda
 import CustomError from "@/src/http/errors/customError";
 import { MessageDtoType } from "@/src/infrastructure/attendances/messages/presenters/mappers/message.mapper";
 import { AttendanceDtoType } from "@/src/infrastructure/attendances/presenters/mappers/attendance.mapper";
+import IMailerService from "@/src/utils/mailer/mailer.interface";
 import IAttendantService from "../../users/attendants/services/attendant.interface";
 import ICustomerService from "../../users/customers/services/customer.interface";
 import IAttendanceService from "./attendance.interface";
@@ -14,6 +15,7 @@ export type AttendanceServiceInjectionType = {
     messageRepository: IMessageRepository;
     customerService: ICustomerService;
     attendantService: IAttendantService;
+    mailerService: IMailerService;
 }
 
 class AttendanceService implements IAttendanceService {
@@ -21,16 +23,20 @@ class AttendanceService implements IAttendanceService {
     private readonly _messageRepository: IMessageRepository;
     private readonly _customerService: ICustomerService;
     private readonly _attendantService: IAttendantService;
+    public mailerService: IMailerService;
+
     constructor({
         attendanceRepository,
         messageRepository,
         customerService,
         attendantService,
+        mailerService
     }: AttendanceServiceInjectionType) {
         this._attendanceRepository = attendanceRepository;
         this._messageRepository = messageRepository;
         this._customerService = customerService;
         this._attendantService = attendantService;
+        this.mailerService = mailerService;
     }
 
     async list(): Promise<AttendanceDtoType[]> {
@@ -61,7 +67,7 @@ class AttendanceService implements IAttendanceService {
 
         //** Logic for send the resume of attendance in customer email */
         const attendant: AttendanceDtoType = await this._attendanceRepository.close(param);
-        await Attendance.close(attendant);
+        await Attendance.close(this.mailerService, attendant);
         return attendant;
     }
 

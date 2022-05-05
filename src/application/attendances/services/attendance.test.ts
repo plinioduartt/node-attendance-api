@@ -14,6 +14,9 @@ import CustomerRepository from "@/src/infrastructure/users/customers/database/in
 import CustomerService from "../../users/customers/services/customer.service";
 import AttendantRepository from "@/src/infrastructure/users/attendants/database/in-memory/repositories/attendant.repository";
 import AttendantService from "../../users/attendants/services/attendant.service";
+import NodeMailerService from "@/src/utils/mailer/nodemailer/nodemailer.service";
+
+jest.setTimeout(50000);
 
 function sutFactory() {
     const customerRepository: CustomerRepository = new CustomerRepository();
@@ -22,11 +25,13 @@ function sutFactory() {
     const attendantService: AttendantService = new AttendantService(attendantRepository);
     const attendanceRepository: AttendanceRepository = new AttendanceRepository();
     const messageRepository: MessageRepository = new MessageRepository();
+    const mailerService: NodeMailerService = new NodeMailerService();
     const service: AttendanceService = new AttendanceService({
         attendanceRepository,
         messageRepository,
         customerService,
-        attendantService
+        attendantService,
+        mailerService
     } as AttendanceServiceInjectionType);
     return service;
 }

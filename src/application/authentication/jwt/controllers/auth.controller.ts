@@ -1,12 +1,12 @@
 import ApiJsonErrorType from "@/src/http/types/api-errors/api-error-response.type";
 import ApiJsonResponseCreateType from "@/src/http/types/api-responses/api-json-response-create.type";
 import { Request, Response } from "express";
-import IJwtService, { CredentialsType } from "../services/jwt.interface";
-import { SignInResponseType } from "../services/jwt.service";
+import IAuthService, { CredentialsType } from "../services/auth.interface";
+import { SignInResponseType } from "../services/auth.service";
 
-class JwtController {
-    private readonly _service: IJwtService;
-    constructor(service: IJwtService) {
+class AuthController {
+    private readonly _service: IAuthService;
+    constructor(service: IAuthService) {
         this._service = service;
     }
 
@@ -38,4 +38,4 @@ class JwtController {
     }
 }
 
-export default JwtController;
+export default AuthController;
