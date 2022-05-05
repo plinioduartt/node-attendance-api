@@ -12,6 +12,7 @@ import AttendantRepository from "@/src/infrastructure/users/attendants/database/
 import CustomerRepository from "@/src/infrastructure/users/customers/database/in-memory/repositories/customer.repository";
 import mockedAttendances from "@/src/mock/attendances/attendances.mock";
 import mockedUsers from "@/src/mock/users/users-list.mock";
+import NodeMailerService from "@/src/utils/mailer/nodemailer/nodemailer.service";
 import { Request, Response } from "express";
 import AttendantService from "../../users/attendants/services/attendant.service";
 import CustomerService from "../../users/customers/services/customer.service";
@@ -27,12 +28,14 @@ function sutFactory() {
     const attendantService: AttendantService = new AttendantService(attendantRepository);
     const attendanceRepository: AttendanceRepository = new AttendanceRepository();
     const messageRepository: MessageRepository = new MessageRepository();
+    const mailerService: NodeMailerService = new NodeMailerService();
     const attendanceService: AttendanceService = new AttendanceService(
         {
             attendanceRepository,
             messageRepository,
             customerService,
-            attendantService
+            attendantService,
+            mailerService
         } as AttendanceServiceInjectionType
     );
     return new AttendanceController(attendanceService);

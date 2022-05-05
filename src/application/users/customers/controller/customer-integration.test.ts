@@ -15,11 +15,14 @@ describe("Customer Controller: Integration tests", () => {
     test("GET /customers => return an paginated array list", async () => {
         // arrange
         const EXPECTED_RESULT: CustomerDtoType = customerMapper.domainToDto(mockedUsers.customers[0]);
+        const userDataForAccessToken = omit(mockedUsers.administrators[0], ['password']) as Partial<AbstractUserDtoType>;
+        const accessToken = Token.generate(userDataForAccessToken);
 
         //act
         const response = await request(application)
             .get('/customers')
-            .set('Accept', 'application/json');
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${accessToken}`);
 
         const parsedResponse: ApiJsonResponseListType<CustomerDtoType> = response.body;
 
