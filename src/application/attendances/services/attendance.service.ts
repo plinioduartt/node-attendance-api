@@ -5,6 +5,8 @@ import IAttendanceRepository from "@/src/domain/attendances/repositories/attenda
 import CustomError from "@/src/http/errors/customError";
 import { MessageDtoType } from "@/src/infrastructure/attendances/messages/presenters/mappers/message.mapper";
 import { AttendanceDtoType } from "@/src/infrastructure/attendances/presenters/mappers/attendance.mapper";
+import events from "@/src/tcp/events";
+import eventsEnum from "@/src/tcp/events/enums/eventsEnum.enum";
 import IMailerService from "@/src/utils/mailer/mailer.interface";
 import IAttendantService from "../../users/attendants/services/attendant.interface";
 import ICustomerService from "../../users/customers/services/customer.interface";
@@ -110,6 +112,12 @@ class AttendanceService implements IAttendanceService {
             attendanceId: id
         });
         const newMessage: MessageDtoType = await this._messageRepository.create(newMessageInstance);
+
+        events.emit(eventsEnum.NEW_CHAT_MESSAGE, {
+            ...newMessage,
+            protocol: attendanceFound.protocol
+        });
+
         return newMessage;
     }
 
