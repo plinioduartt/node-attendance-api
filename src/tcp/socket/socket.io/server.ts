@@ -1,7 +1,7 @@
 import { MessageDtoType } from "@/src/infrastructure/attendances/messages/presenters/mappers/message.mapper";
 import { AttendanceDtoType } from "@/src/infrastructure/attendances/presenters/mappers/attendance.mapper";
 import { Application } from "express";
-import { createServer } from "http";
+import { createServer, Server as IHttpServer } from "http";
 import { Server } from "socket.io";
 import eventsEnum from "../../events/enums/eventsEnum.enum";
 
@@ -10,11 +10,11 @@ export type JoinChatDataType = {
     userName: string;
 }
 
-function initSocket(application: Application) {
-    const httpServer = createServer(application);
-    const io = new Server(httpServer, {});
+function initSocket(application: Application): void {
+    const httpServer: IHttpServer = createServer(application);
+    const io: Server = new Server(httpServer, {});
 
-    io.on("connection", (socket) => {
+    io.on("connection", (socket): void => {
         socket.on(eventsEnum.JOIN_CHAT, (data: JoinChatDataType) => {
             socket.join(data.protocol);
             io.to(data.protocol).emit(eventsEnum.JOINED_CHAT, data.userName);
@@ -27,7 +27,7 @@ function initSocket(application: Application) {
         });
     });
     
-    const testingEnv = process.env.NODE_ENV === "test";
+    const testingEnv: boolean = process.env.NODE_ENV === "test";
 
     if (!testingEnv) {
         httpServer.listen(process.env.SOCKET_PORT, () => {

@@ -11,9 +11,3 @@ services:
       - "${PORT}:3000"
     env_file:
       - .env
-    volumes:
-      - .:/usr/app/node-attendance-api
-
-volumes:
-  db_volume:
-    external: false
