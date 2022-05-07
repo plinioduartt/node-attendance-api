@@ -35,9 +35,17 @@
 - Should have init and close datetime informations
 - On close, should send attendance messages history to customer by email
 
-## Node.js todolist
+## Node.js pending todolist
 
 - Graceful shutdown
 - Errors handle
 - Node.js streams for files upload
-- Install pino logger
+- Implement pino logger
+- Implement database
+- Implement review and rating of attendants  
+
+## Steps to run
+
+```
+docker-compose up (you should add the flag -d to free your terminal)
+```

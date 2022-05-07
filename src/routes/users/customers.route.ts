@@ -36,6 +36,8 @@ customersRouter.patch('/customers/:id', [
     HandleUpdateCustomersMiddleware
 ], controller.update.bind(controller));
 
-console.info('Customers routes has been initialized.');
+if (process.env.NODE_ENV !== "test") {
+    console.info('Customers routes has been initialized.');
+}
 
 export default customersRouter;

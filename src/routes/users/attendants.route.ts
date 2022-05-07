@@ -38,6 +38,8 @@ attendantsRouter.patch('/attendants/:id', [
     HandleUpdateAttendantsMiddleware
 ], controller.update.bind(controller));
 
-console.info('Attendants routes has been initialized.');
+if (process.env.NODE_ENV !== "test") {
+    console.info('Attendants routes has been initialized.');
+}
 
 export default attendantsRouter;

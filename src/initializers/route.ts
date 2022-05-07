@@ -15,6 +15,8 @@ routes.use([
     attendancesRouter
 ]);
 
-console.info('All routes has been initialized succesfully.');
+if (process.env.NODE_ENV !== "test") {
+    console.info('All routes has been initialized succesfully.');
+}
 
 export default routes;

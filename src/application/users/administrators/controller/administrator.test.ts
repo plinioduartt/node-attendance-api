@@ -6,6 +6,7 @@ import ApiJsonResponseListType from "@/src/http/types/api-responses/api-json-res
 import ApiJsonResponseRetrieveType from "@/src/http/types/api-responses/api-json-response-retrieve.type";
 import AdministratorRepository from "@/src/infrastructure/users/administrators/database/in-memory/repositories/administrator.repository";
 import mockedUsers from "@/src/mock/users/users-list.mock";
+import ClientSocket from "@/src/tcp/socket/socket.io/client";
 import { Request, Response } from "express";
 import AdministratorService from "../services/administrator.service";
 import AdministratorController from "./administrator.controller";
@@ -26,6 +27,7 @@ describe("Administrator controller", () => {
     });
 
     afterAll(() => {
+        ClientSocket.closeSocket();
         jest.resetAllMocks();
     });
 

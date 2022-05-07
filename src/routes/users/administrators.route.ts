@@ -36,6 +36,8 @@ administratorsRouter.patch('/administrators/:id', [
     OnlyAdministratorMiddleware
 ], controller.update.bind(controller));
 
-console.info('Administrators routes has been initialized.');
+if (process.env.NODE_ENV !== "test") {
+    console.info('Administrators routes has been initialized.');
+}
 
 export default administratorsRouter;

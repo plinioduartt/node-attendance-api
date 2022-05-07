@@ -6,6 +6,7 @@ import ApiJsonResponseListType from "@/src/http/types/api-responses/api-json-res
 import ApiJsonResponseRetrieveType from "@/src/http/types/api-responses/api-json-response-retrieve.type";
 import AttendantRepository from "@/src/infrastructure/users/attendants/database/in-memory/repositories/attendant.repository";
 import mockedUsers from "@/src/mock/users/users-list.mock";
+import ClientSocket from "@/src/tcp/socket/socket.io/client";
 import { Request, Response } from "express";
 import AttendantService from "../services/attendant.service";
 import AttendantController from "./attendant.controller";
@@ -26,6 +27,7 @@ describe("Attendant controller", () => {
     });
 
     afterAll(() => {
+        ClientSocket.closeSocket();
         jest.resetAllMocks();
     });
 

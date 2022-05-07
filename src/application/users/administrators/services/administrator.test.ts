@@ -3,6 +3,7 @@ import roles from "@/src/domain/users/enums/roles.enum";
 import AdministratorRepository from "@/src/infrastructure/users/administrators/database/in-memory/repositories/administrator.repository";
 import AdministratorMapper, { AdministratorDtoType } from "@/src/infrastructure/users/administrators/presenters/mappers/administrator.mapper";
 import mockedUsers from "@/src/mock/users/users-list.mock";
+import ClientSocket from "@/src/tcp/socket/socket.io/client";
 import { omit } from "lodash";
 import AdministratorService from "./administrator.service";
 
@@ -23,6 +24,10 @@ describe('Administrator services', () => {
         state: "SP",
         roleId: roles.ADMINISTRATOR
     };
+
+    afterAll(() => {
+        ClientSocket.closeSocket();
+    });
 
     it('Create Administrator: Should create a valid user', async () => {
         // arrange

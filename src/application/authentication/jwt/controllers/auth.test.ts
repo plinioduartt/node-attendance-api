@@ -2,6 +2,7 @@ import AbstractUserService from "@/src/application/users/abstract-users/services
 import ApiJsonErrorType from "@/src/http/types/api-errors/api-error-response.type";
 import ApiJsonResponseCreateType from "@/src/http/types/api-responses/api-json-response-create.type";
 import AbstractUserRepository from "@/src/infrastructure/users/abstract-users/database/in-memory/repositories/abstract-user.repository";
+import ClientSocket from "@/src/tcp/socket/socket.io/client";
 import { Request, Response } from "express";
 import { CredentialsType } from "../services/auth.interface";
 import AuthService, { SignInResponseType } from "../services/auth.service";
@@ -26,6 +27,10 @@ describe("Auth Controller", () => {
 
     afterAll(() => {
         jest.resetAllMocks();
+    });
+
+    afterAll(() => {
+        ClientSocket.closeSocket();
     });
 
     it("SignIn ==> Should authenticate a user when valid credentials", async () => {

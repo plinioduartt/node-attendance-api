@@ -12,6 +12,7 @@ import AttendantRepository from "@/src/infrastructure/users/attendants/database/
 import CustomerRepository from "@/src/infrastructure/users/customers/database/in-memory/repositories/customer.repository";
 import mockedAttendances from "@/src/mock/attendances/attendances.mock";
 import mockedUsers from "@/src/mock/users/users-list.mock";
+import ClientSocket from "@/src/tcp/socket/socket.io/client";
 import NodeMailerService from "@/src/utils/mailer/nodemailer/nodemailer.service";
 import { Request, Response } from "express";
 import AttendantService from "../../users/attendants/services/attendant.service";
@@ -49,6 +50,7 @@ describe("Attendance controller", () => {
     });
 
     afterAll(() => {
+        ClientSocket.closeSocket();
         jest.resetAllMocks();
     });
 
@@ -295,6 +297,7 @@ describe("Attendance controller EXPECTED ERRORS", () => {
     });
 
     afterAll(() => {
+        ClientSocket.closeSocket();
         jest.resetAllMocks();
     });
 

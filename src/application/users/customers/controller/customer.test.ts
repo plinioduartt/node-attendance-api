@@ -6,6 +6,7 @@ import ApiJsonResponseListType from "@/src/http/types/api-responses/api-json-res
 import ApiJsonResponseRetrieveType from "@/src/http/types/api-responses/api-json-response-retrieve.type";
 import CustomerRepository from "@/src/infrastructure/users/customers/database/in-memory/repositories/customer.repository";
 import mockedUsers from "@/src/mock/users/users-list.mock";
+import ClientSocket from "@/src/tcp/socket/socket.io/client";
 import { Request, Response } from "express";
 import CustomerService from "../services/customer.service";
 import CustomerController from "./customer.controller";
@@ -26,6 +27,7 @@ describe("Customer controller", () => {
     });
 
     afterAll(() => {
+        ClientSocket.closeSocket();
         jest.resetAllMocks();
     });
 

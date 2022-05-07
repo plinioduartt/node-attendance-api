@@ -15,6 +15,7 @@ import CustomerService from "../../users/customers/services/customer.service";
 import AttendantRepository from "@/src/infrastructure/users/attendants/database/in-memory/repositories/attendant.repository";
 import AttendantService from "../../users/attendants/services/attendant.service";
 import NodeMailerService from "@/src/utils/mailer/nodemailer/nodemailer.service";
+import ClientSocket from "@/src/tcp/socket/socket.io/client";
 
 jest.setTimeout(50000);
 
@@ -43,6 +44,10 @@ describe('Attendance services', () => {
     const attendanceData: AttendanceType = {
         customerId: mockedUsers.customers[0].id ?? DEFAULT_USER_ID_FOR_TESTS,
     };
+
+    afterAll(() => {
+        ClientSocket.closeSocket();
+    });
 
     it('Open Attendance: Should open a new valid attendance', async () => {
         // arrange
@@ -175,6 +180,10 @@ describe('Attendance services EXPECTED ERRORS', () => {
         customerId: mockedUsers.customers[0].id ?? DEFAULT_USER_ID_FOR_TESTS,
     };
 
+    afterAll(() => {
+        ClientSocket.closeSocket();
+    });
+    
     it('Open Attendance: Should return an error if customerId is not given', async () => {
         // arrange
         const MISSED_PROPERTY: string = 'customerId';

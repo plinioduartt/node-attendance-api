@@ -19,6 +19,8 @@ const controller = initController();
 
 administratorsRouter.post('/sign-in', controller.signIn.bind(controller));
 
-console.info('SignIn route has been initialized.');
+if (process.env.NODE_ENV !== "test") {
+    console.info('SignIn route has been initialized.');
+}
 
 export default administratorsRouter;

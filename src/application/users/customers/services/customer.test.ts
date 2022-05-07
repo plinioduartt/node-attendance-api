@@ -3,6 +3,7 @@ import roles from "@/src/domain/users/enums/roles.enum";
 import CustomerRepository from "@/src/infrastructure/users/customers/database/in-memory/repositories/customer.repository";
 import customerMapper, { CustomerDtoType } from "@/src/infrastructure/users/customers/presenters/mappers/customer.mapper";
 import mockedUsers from "@/src/mock/users/users-list.mock";
+import ClientSocket from "@/src/tcp/socket/socket.io/client";
 import { omit } from "lodash";
 import CustomerService from "./customer.service";
 
@@ -11,6 +12,10 @@ function sutFactory() {
     const service: CustomerService = new CustomerService(repository);
     return service;
 }
+
+afterAll(() => {
+    ClientSocket.closeSocket();
+});
 
 describe('Customer services', () => {
     const sut: CustomerService = sutFactory();

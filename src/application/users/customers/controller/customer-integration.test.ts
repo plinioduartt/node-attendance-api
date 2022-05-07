@@ -6,12 +6,17 @@ import { AbstractUserDtoType } from '@/src/infrastructure/users/abstract-users/p
 import customerMapper, { CustomerDtoType } from '@/src/infrastructure/users/customers/presenters/mappers/customer.mapper';
 import application from '@/src/initializers/application';
 import mockedUsers from '@/src/mock/users/users-list.mock';
+import ClientSocket from '@/src/tcp/socket/socket.io/client';
 import { omit } from 'lodash';
 import request from 'supertest';
 
 jest.setTimeout(50000);
 describe("Customer Controller: Integration tests", () => {
 
+    afterAll(() => {
+        ClientSocket.closeSocket();
+    });
+    
     test("GET /customers => return an paginated array list", async () => {
         // arrange
         const EXPECTED_RESULT: CustomerDtoType = customerMapper.domainToDto(mockedUsers.customers[0]);

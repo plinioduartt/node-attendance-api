@@ -6,12 +6,17 @@ import { AbstractUserDtoType } from '@/src/infrastructure/users/abstract-users/p
 import AttendantMapper, { AttendantDtoType } from '@/src/infrastructure/users/attendants/presenters/mappers/attendant.mapper';
 import application from '@/src/initializers/application';
 import mockedUsers from '@/src/mock/users/users-list.mock';
+import ClientSocket from '@/src/tcp/socket/socket.io/client';
 import { omit } from 'lodash';
 import request from 'supertest';
 
 jest.setTimeout(50000);
 describe("Attendant Controller: Integration tests", () => {
 
+    afterAll(() => {
+        ClientSocket.closeSocket();
+    });
+    
     test("GET /attendants => return an paginated array list", async () => {
         // arrange
         const EXPECTED_RESULT: AttendantDtoType = AttendantMapper.domainToDto(mockedUsers.attendants[0]);

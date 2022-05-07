@@ -5,6 +5,7 @@ import AttendantMapper, { AttendantDtoType } from "@/src/infrastructure/users/at
 import mockedUsers from "@/src/mock/users/users-list.mock";
 import AttendantService from "./attendant.service";
 import { omit } from "lodash";
+import ClientSocket from "@/src/tcp/socket/socket.io/client";
 
 function sutFactory() {
     const repository: AttendantRepository = new AttendantRepository();
@@ -24,6 +25,10 @@ describe('Attendant services', () => {
         state: "SP",
         roleId: roles.ATTENDANT
     };
+
+    afterAll(() => {
+        ClientSocket.closeSocket();
+    });
 
     it('Create attendant: Should create a valid user', async () => {
         // arrange

@@ -1,20 +1,20 @@
 version: "3"
 
 services:
-  test:
+  tests:
     build: .
-    command: yarn test
     container_name: tests-environment-container
     env_file:
       - .env.test
 
   dev:
     build: .
-    command: yarn dev
     container_name: development-environment-container
     restart: unless-stopped
     depends_on:
-      - test
+      - tests
+    links: 
+      - "tests:tests"
     ports:
       - "${PORT}:3000"
     env_file:

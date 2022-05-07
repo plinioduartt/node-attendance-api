@@ -40,6 +40,8 @@ attendancesRouter.patch('/attendances/:id', controller.update.bind(controller));
 attendancesRouter.post('/attendances/:id/messages', controller.writeMessage.bind(controller));
 attendancesRouter.get('/attendances/:id/messages', controller.listMessages.bind(controller));
 
-console.info('Attendance routes has been initialized.');
+if (process.env.NODE_ENV !== "test") {
+    console.info('Attendance routes has been initialized.');
+}
 
 export default attendancesRouter;

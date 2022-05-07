@@ -45,7 +45,9 @@ class NodeMailerService implements IMailerService {
 
             let info: nodemailer.SentMessageInfo = await this._transporter.sendMail(emailData);
 
-            console.info("Email sent: %s", info.messageId);
+            if (process.env.NODE_ENV !== "test") {
+                console.info("Email sent: %s", info.messageId);
+            }
         } catch (error: any) {
             console.error(error.message);
             throw new CustomError(400, 'Unexpected error while sending email.')
