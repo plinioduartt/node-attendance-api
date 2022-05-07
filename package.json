@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test node node_modules/jest/bin/jest.js --detectOpenHandles",
+    "test": "NODE_ENV=test node node_modules/jest/bin/jest.js",
     "dev": "npx nodemon -r dotenv/config -r tsconfig-paths/register ./src/index.ts"
   },
   "keywords": [],

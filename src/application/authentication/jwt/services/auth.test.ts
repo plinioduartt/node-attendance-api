@@ -1,5 +1,6 @@
 import AbstractUserService from "@/src/application/users/abstract-users/services/abstract-user.service";
 import AbstractUserRepository from "@/src/infrastructure/users/abstract-users/database/in-memory/repositories/abstract-user.repository";
+import ClientSocket from "@/src/tcp/socket/socket.io/client";
 import { CredentialsType } from "./auth.interface";
 import AuthService, { SignInResponseType } from "./auth.service";
 
@@ -20,6 +21,10 @@ describe('Auth Services', () => {
         email: 'teste@gmail.com',
         password: '123456'
     };
+
+    afterAll(() => {
+        ClientSocket.closeSocket();
+    });
 
     it('SignIn ==> Should authenticate an user when valid credentials', async () => {
         // arrange

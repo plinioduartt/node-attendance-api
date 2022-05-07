@@ -1,22 +1,19 @@
 version: "3"
 
 services:
-  tests:
-    build: .
-    container_name: tests-environment-container
-    env_file:
-      - .env.test
-
-  dev:
-    build: .
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: development-environment-container
     restart: unless-stopped
-    depends_on:
-      - tests
-    links: 
-      - "tests:tests"
     ports:
       - "${PORT}:3000"
     env_file:
       - .env
+    volumes:
+      - .:/usr/app/node-attendance-api
 
+volumes:
+  db_volume:
+    external: false
