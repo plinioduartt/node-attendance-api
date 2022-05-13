@@ -47,5 +47,6 @@
 ## Steps to run
 
 ```
-docker-compose up (you should add the flag -d to free your terminal)
+docker-compose down && docker-compose build --no-cache && docker-compose up
+(you should add the flag -d to free your terminal)
 ```

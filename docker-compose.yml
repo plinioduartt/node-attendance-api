@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: attendance-api-image
     container_name: development-environment-container
     restart: unless-stopped
     ports:
