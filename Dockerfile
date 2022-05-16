@@ -9,7 +9,7 @@ COPY . .
 RUN yarn test
 
 # Build stage 2
-# Running tests...
+# Running development server...
 #
 FROM node:alpine
 WORKDIR /usr/app
