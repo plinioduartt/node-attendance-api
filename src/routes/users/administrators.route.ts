@@ -16,22 +16,22 @@ function initController(): AdministratorController {
 
 const controller = initController();
 
-administratorsRouter.get('/administrators', [
+administratorsRouter.get('/', [
     RequireAuthenticationMiddleware,
     OnlyAdministratorMiddleware
 ], controller.list.bind(controller));
 
-administratorsRouter.get('/administrators/:id', [
+administratorsRouter.get('/:id', [
     RequireAuthenticationMiddleware,
     OnlyAdministratorMiddleware
 ], controller.retrieve.bind(controller));
 
-administratorsRouter.post('/administrators', [
+administratorsRouter.post('/', [
     RequireAuthenticationMiddleware,
     OnlyAdministratorMiddleware
 ], controller.create.bind(controller));
 
-administratorsRouter.patch('/administrators/:id', [
+administratorsRouter.patch('/:id', [
     RequireAuthenticationMiddleware,
     OnlyAdministratorMiddleware
 ], controller.update.bind(controller));

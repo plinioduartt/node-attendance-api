@@ -9,8 +9,6 @@ import CustomerRepository from '@/src/infrastructure/users/customers/database/in
 import NodeMailerService from '@/src/utils/mailer/nodemailer/nodemailer.service';
 import { Router } from 'express';
 
-const attendancesRouter = Router();
-
 function initController(): AttendanceController {
     const customerRepository: CustomerRepository = new CustomerRepository();
     const customerService: CustomerService = new CustomerService(customerRepository);
@@ -32,13 +30,15 @@ function initController(): AttendanceController {
 
 const controller = initController();
 
-attendancesRouter.get('/attendances', controller.list.bind(controller));
-attendancesRouter.get('/attendances/:id', controller.retrieve.bind(controller));
-attendancesRouter.post('/attendances', controller.open.bind(controller));
-attendancesRouter.patch('/attendances/:id/close', controller.close.bind(controller));
-attendancesRouter.patch('/attendances/:id', controller.update.bind(controller));
-attendancesRouter.post('/attendances/:id/messages', controller.writeMessage.bind(controller));
-attendancesRouter.get('/attendances/:id/messages', controller.listMessages.bind(controller));
+const attendancesRouter = Router();
+
+attendancesRouter.get('/', controller.list.bind(controller));
+attendancesRouter.get('/:id', controller.retrieve.bind(controller));
+attendancesRouter.post('/', controller.open.bind(controller));
+attendancesRouter.patch('/:id/close', controller.close.bind(controller));
+attendancesRouter.patch('/:id', controller.update.bind(controller));
+attendancesRouter.post('/:id/messages', controller.writeMessage.bind(controller));
+attendancesRouter.get('/:id/messages', controller.listMessages.bind(controller));
 
 if (process.env.NODE_ENV !== "test") {
     console.info('Attendance routes has been initialized.');

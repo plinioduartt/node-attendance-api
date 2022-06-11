@@ -6,20 +6,58 @@ import ApiJsonResponseListType from "@/src/http/types/api-responses/api-json-res
 import ApiJsonResponseRetrieveType from "@/src/http/types/api-responses/api-json-response-retrieve.type";
 import { MessageDtoType } from "@/src/infrastructure/attendances/messages/presenters/mappers/message.mapper";
 import { AttendanceDtoType } from "@/src/infrastructure/attendances/presenters/mappers/attendance.mapper";
+import Hateoas from "@/src/infrastructure/framework/express/Hateoas";
+import attendancesRouter from "@/src/routes/attendances/attendances.route";
 import { Request, Response } from "express";
 import IAttendanceService from "../services/attendance.interface";
 
 class AttendanceController {
     private readonly _service: IAttendanceService;
+
     constructor(AttendanceService: IAttendanceService) {
         this._service = AttendanceService;
     }
 
     async list(request: Request, response: Response) {
         try {
-            const Attendances: AttendanceDtoType[] = await this._service.list();
+            const attendances: AttendanceDtoType[] = await this._service.list();
+            
+            const involvedEachEndpoints: string[] = [
+                'retrieve',
+                'close',
+                'update',
+                'writeMessage',
+                'listMessages',
+            ]
+            const attendancesWithCollection: AttendanceDtoType[] = await Hateoas.injectEachCollection<AttendanceDtoType>({
+                basePath: '/attendances',
+                router: attendancesRouter,
+                param: 'id',
+                selfIdentity: 'retrieve',
+                items: attendances,
+                involvedEndpoints: involvedEachEndpoints
+            })
+
+            const fakeLastPage = 10
+            const fakeCurrentPage = 1
+            const involvedRootEndpoints: string[] = [
+                'list',
+            ]
+            const rootCollection: any = await Hateoas.getRootCollection({
+                involvedEndpoints: involvedRootEndpoints,
+                basePath: '/attendances',
+                router: attendancesRouter,
+                selfIdentity: 'list',
+                // param: 'id',
+                // paramValue: '123',
+                withPagination: true,
+                lastPage: fakeLastPage,
+                currentPage: fakeCurrentPage
+            })
+
             const responseJson: ApiJsonResponseListType<AttendanceDtoType> = {
-                data: Attendances,
+                data: attendancesWithCollection,
+                ...rootCollection
                 // Still need to set pagination props like offset, limit, etc...
             };
 
