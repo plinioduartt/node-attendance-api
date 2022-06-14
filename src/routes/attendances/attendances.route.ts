@@ -1,44 +1,63 @@
-import AttendanceController from '@/src/application/attendances/controllers/attendance.controller';
-import AttendanceService, { AttendanceServiceInjectionType } from '@/src/application/attendances/services/attendance.service';
-import AttendantService from '@/src/application/users/attendants/services/attendant.service';
-import CustomerService from '@/src/application/users/customers/services/customer.service';
-import AttendanceRepository from '@/src/infrastructure/attendances/database/in-memory/repositories/attendance.repository';
-import MessageRepository from '@/src/infrastructure/attendances/messages/database/in-memory/repositories/message.repository';
-import AttendantRepository from '@/src/infrastructure/users/attendants/database/in-memory/repositories/attendant.repository';
-import CustomerRepository from '@/src/infrastructure/users/customers/database/in-memory/repositories/customer.repository';
-import NodeMailerService from '@/src/utils/mailer/nodemailer/nodemailer.service';
+import AttendanceController from '@/src/application/attendances/controllers/attendance2.controller';
+import { HttpMethods } from '@/src/http/protocols/http';
+import { Endpoint } from '@/src/http/protocols/routes';
 import { Router } from 'express';
+import ControllerFactory from './controllerFactory';
 
-function initController(): AttendanceController {
-    const customerRepository: CustomerRepository = new CustomerRepository();
-    const customerService: CustomerService = new CustomerService(customerRepository);
-    const attendantRepository: AttendantRepository = new AttendantRepository();
-    const attendantService: AttendantService = new AttendantService(attendantRepository);
-    const attendanceRepository: AttendanceRepository = new AttendanceRepository();
-    const messageRepository: MessageRepository = new MessageRepository();
-    const mailerService: NodeMailerService = new NodeMailerService();
-    const service: AttendanceService = new AttendanceService({
-        attendanceRepository,
-        messageRepository,
-        customerService,
-        attendantService,
-        mailerService
-    } as AttendanceServiceInjectionType);
-    const controller: AttendanceController = new AttendanceController(service);
-    return controller;
-};
+export const attendancesEndpoints: Endpoint<AttendanceController>[] = [
+    {
+        methodName: 'list',
+        path: '/',
+        httpMethod: HttpMethods.GET
+    },
+    {
+        methodName: 'retrieve',
+        path: '/:id',
+        httpMethod: HttpMethods.GET,
+        param: 'id'
+    },
+    {
+        methodName: 'close',
+        path: '/:id/close',
+        httpMethod: HttpMethods.PATCH,
+        param: 'id'
+    },
+    {
+        methodName: 'update',
+        path: '/:id',
+        httpMethod: HttpMethods.PATCH,
+        param: 'id'
+    },
+    {
+        methodName: 'writeMessage',
+        path: '/:id/messages',
+        httpMethod: HttpMethods.POST,
+        param: 'id'
+    },
+    {
+        methodName: 'listMessages',
+        path: '/:id/messages',
+        httpMethod: HttpMethods.GET,
+        param: 'id'
+    }
+]
 
-const controller = initController();
+const controller = ControllerFactory();
 
 const attendancesRouter = Router();
 
-attendancesRouter.get('/', controller.list.bind(controller));
-attendancesRouter.get('/:id', controller.retrieve.bind(controller));
-attendancesRouter.post('/', controller.open.bind(controller));
-attendancesRouter.patch('/:id/close', controller.close.bind(controller));
-attendancesRouter.patch('/:id', controller.update.bind(controller));
-attendancesRouter.post('/:id/messages', controller.writeMessage.bind(controller));
-attendancesRouter.get('/:id/messages', controller.listMessages.bind(controller));
+attendancesEndpoints.map(endpoint => {
+    const methodToBeCalled = Reflect
+        .get(controller, endpoint.methodName)
+        .bind(controller);
+
+    if (!methodToBeCalled || typeof methodToBeCalled !== 'function') {
+        throw Error('Not implemented!');
+    }
+
+    attendancesRouter[endpoint.httpMethod](endpoint.path, methodToBeCalled);
+})
+
 
 if (process.env.NODE_ENV !== "test") {
     console.info('Attendance routes has been initialized.');

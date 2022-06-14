@@ -7,8 +7,10 @@ abstract class Token {
     private constructor() { }
 
     static generate(data: Partial<AbstractUserDtoType>): string {
-        const EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? 60 * 60;
+        const EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? 60 * 60 * 24;
         const JWT_SECRET = process.env.JWT_SECRET ?? '';
+
+        console.log('EXPIRES_IN', EXPIRES_IN)
 
         const token = jsonwebtoken.sign(
             { data },

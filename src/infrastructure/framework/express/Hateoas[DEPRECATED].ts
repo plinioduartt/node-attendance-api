@@ -1,6 +1,6 @@
-import GivenInvolvedEndpointNotExistsException from "./errors/GivenInvolvedEndpointNotExistsException"
-import MissingInvolvedEndpointsException from "./errors/MissingInvolvedEndpointsException"
-import MissingParameterException from "./errors/MissingParameterException"
+import GivenInvolvedEndpointNotExistsException from "../../hateoas/errors/GivenInvolvedEndpointNotExistsException"
+import MissingInvolvedEndpointsException from "../../hateoas/errors/MissingInvolvedEndpointsException"
+import MissingParameterException from "../../hateoas/errors/MissingParameterException"
 import { AvailableEndpoint, GetRootCollectionArgs, InjectEachCollectionArgs, setAvailableEndpointsArgs } from "./protocols/hateoas"
 
 enum HATEOAS_TYPE {
@@ -19,6 +19,9 @@ export type Hyperlink = {
   _links: Links
 }
 
+/**
+ * @deprecated
+ */
 class Hateoas {
   private static readonly origin: string = 'http://localhost:3000'
   private constructor() { }

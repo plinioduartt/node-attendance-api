@@ -10,6 +10,7 @@ import attendancesRouter from '../routes/attendances/attendances.route';
 import administratorsRouter from '../routes/users/administrators.route';
 import attendantsRouter from '../routes/users/attendants.route';
 import customersRouter from '../routes/users/customers.route';
+import signInRouter from '../routes/authentication/sign-in.route';
 
 dotenv.config();
 const application: Application = express();
@@ -24,6 +25,7 @@ if (env === 'development') {
 application.use(helmet());
 
 router.use(express.json());
+router.use('/auth', signInRouter)
 router.use('/attendances', attendancesRouter)
 router.use('/administrators', administratorsRouter)
 router.use('/attendants', attendantsRouter)

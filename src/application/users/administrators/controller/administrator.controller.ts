@@ -3,21 +3,61 @@ import ApiJsonErrorType from "@/src/http/types/api-errors/api-error-response.typ
 import ApiJsonResponseCreateType from "@/src/http/types/api-responses/api-json-response-create.type";
 import ApiJsonResponseListType from "@/src/http/types/api-responses/api-json-response-list.type";
 import ApiJsonResponseRetrieveType from "@/src/http/types/api-responses/api-json-response-retrieve.type";
+import IHateoas from "@/src/infrastructure/hateoas/IHateoas";
+import { Hyperlink } from "@/src/infrastructure/hateoas/protocols";
 import { AdministratorDtoType } from "@/src/infrastructure/users/administrators/presenters/mappers/administrator.mapper";
+import { administratorEndpoints } from "@/src/routes/users/administrators.route";
 import { Request, Response } from "express";
 import IAdministratorService from "../services/administrator.interface";
 
 class AdministratorController {
     private readonly _service: IAdministratorService;
-    constructor(AdministratorService: IAdministratorService) {
+    private hateoas: IHateoas<AdministratorController>;
+
+    constructor(AdministratorService: IAdministratorService, hateoas: IHateoas<AdministratorController>) {
         this._service = AdministratorService;
+
+        const contextName: string = '/administrators'
+        this.hateoas = hateoas
+        this.hateoas.registerContext(contextName)
+        this.hateoas.registerEndpoints(administratorEndpoints)
     }
 
     async list(request: Request, response: Response) {
         try {
-            const Administrators: AdministratorDtoType[] = await this._service.list();
+            const administrators: AdministratorDtoType[] = await this._service.list();
+
+            const attendancesWithCollection: AdministratorDtoType[] =
+                await this.hateoas
+                    .injectEachCollection<AdministratorDtoType>({
+                        selfIdentity: 'retrieve',
+                        items: administrators,
+                        involvedEndpoints: [
+                            'retrieve',
+                            'create',
+                            'update',
+                        ]
+                    })
+
+            const fakeLastPage = 10
+            const fakeCurrentPage = 1
+            const rootCollection: Hyperlink =
+                await this.hateoas.getRootCollection({
+                    selfIdentity: 'list',
+                    // param: 'id',
+                    // paramValue: '123',
+                    withPagination: true,
+                    lastPage: fakeLastPage,
+                    currentPage: fakeCurrentPage,
+                    involvedEndpoints: [
+                        'list',
+                        // 'retrieve'
+                    ]
+                })
+
             const responseJson: ApiJsonResponseListType<AdministratorDtoType> = {
-                data: Administrators,
+                data: attendancesWithCollection,
+                ...rootCollection
                 // Still need to set pagination props like offset, limit, etc...
             };
 

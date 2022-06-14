@@ -6,7 +6,7 @@ import ApiJsonResponseListType from "@/src/http/types/api-responses/api-json-res
 import ApiJsonResponseRetrieveType from "@/src/http/types/api-responses/api-json-response-retrieve.type";
 import { MessageDtoType } from "@/src/infrastructure/attendances/messages/presenters/mappers/message.mapper";
 import { AttendanceDtoType } from "@/src/infrastructure/attendances/presenters/mappers/attendance.mapper";
-import Hateoas from "@/src/infrastructure/framework/express/Hateoas";
+import Hateoas from "@/src/infrastructure/framework/express/Hateoas[DEPRECATED]";
 import attendancesRouter from "@/src/routes/attendances/attendances.route";
 import { Request, Response } from "express";
 import IAttendanceService from "../services/attendance.interface";

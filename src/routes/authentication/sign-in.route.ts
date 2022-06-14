@@ -5,7 +5,7 @@ import AbstractUserService from '@/src/application/users/abstract-users/services
 import AbstractUserRepository from '@/src/infrastructure/users/abstract-users/database/in-memory/repositories/abstract-user.repository';
 import { Router } from 'express';
 
-const administratorsRouter = Router();
+const signInRouter = Router();
 
 function initController(): AuthController {
     const abstractUserRepository: AbstractUserRepository = new AbstractUserRepository();
@@ -17,10 +17,10 @@ function initController(): AuthController {
 
 const controller = initController();
 
-administratorsRouter.post('/sign-in', controller.signIn.bind(controller));
+signInRouter.post('/sign-in', controller.signIn.bind(controller));
 
 if (process.env.NODE_ENV !== "test") {
     console.info('SignIn route has been initialized.');
 }
 
-export default administratorsRouter;
+export default signInRouter;

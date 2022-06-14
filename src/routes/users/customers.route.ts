@@ -18,20 +18,20 @@ function initController(): CustomerController {
 };
 
 const controller = initController();
-
-customersRouter.get('/customers', [
+ 
+customersRouter.get('/', [
     RequireAuthenticationMiddleware,
     OnlyEmployeesMiddleware
 ], controller.list.bind(controller));
 
-customersRouter.get('/customers/:id', [
+customersRouter.get('/:id', [
     RequireAuthenticationMiddleware,
     HandleRetrieveCustomersMiddleware
 ], controller.retrieve.bind(controller));
 
-customersRouter.post('/customers', controller.create.bind(controller));
+customersRouter.post('/', controller.create.bind(controller));
 
-customersRouter.patch('/customers/:id', [
+customersRouter.patch('/:id', [
     RequireAuthenticationMiddleware,
     HandleUpdateCustomersMiddleware
 ], controller.update.bind(controller));

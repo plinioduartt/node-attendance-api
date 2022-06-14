@@ -18,22 +18,22 @@ function initController(): AttendantController {
 
 const controller = initController();
 
-attendantsRouter.get('/attendants', [
+attendantsRouter.get('/', [
     RequireAuthenticationMiddleware,
     OnlyAdministratorMiddleware
 ], controller.list.bind(controller));
 
-attendantsRouter.get('/attendants/:id', [
+attendantsRouter.get('/:id', [
     RequireAuthenticationMiddleware,
     HandleRetrieveAttendantsMiddleware
 ], controller.retrieve.bind(controller));
 
-attendantsRouter.post('/attendants', [
+attendantsRouter.post('/', [
     RequireAuthenticationMiddleware,
     OnlyAdministratorMiddleware
 ], controller.create.bind(controller));
 
-attendantsRouter.patch('/attendants/:id', [
+attendantsRouter.patch('/:id', [
     RequireAuthenticationMiddleware,
     HandleUpdateAttendantsMiddleware
 ], controller.update.bind(controller));
