@@ -1,4 +1,4 @@
-import AttendanceController from '@/src/application/attendances/controllers/attendance2.controller';
+import AttendanceController from '@/src/application/attendances/controllers/attendance.controller';
 import { HttpMethods } from '@/src/http/protocols/http';
 import { Endpoint } from '@/src/http/protocols/routes';
 import { Router } from 'express';

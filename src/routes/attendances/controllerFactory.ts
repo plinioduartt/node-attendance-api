@@ -1,4 +1,4 @@
-import AttendanceController from "@/src/application/attendances/controllers/attendance2.controller";
+import AttendanceController from "@/src/application/attendances/controllers/attendance.controller";
 import AttendanceService, { AttendanceServiceInjectionType } from "@/src/application/attendances/services/attendance.service";
 import AttendantService from "@/src/application/users/attendants/services/attendant.service";
 import CustomerService from "@/src/application/users/customers/services/customer.service";
@@ -24,7 +24,7 @@ function ControllerFactory(): AttendanceController {
       attendantService,
       mailerService
   } as AttendanceServiceInjectionType);
-  const controller: AttendanceController = new AttendanceController(service, new Hateoas<AttendanceController>());
+  const controller: AttendanceController = new AttendanceController(service, Hateoas);
   return controller;
 };
 

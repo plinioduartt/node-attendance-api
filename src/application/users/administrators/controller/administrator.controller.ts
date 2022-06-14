@@ -12,15 +12,13 @@ import IAdministratorService from "../services/administrator.interface";
 
 class AdministratorController {
     private readonly _service: IAdministratorService;
-    private hateoas: IHateoas<AdministratorController>;
+    private hateoas: IHateoas;
+    private readonly context: string = '/administrators'
 
-    constructor(AdministratorService: IAdministratorService, hateoas: IHateoas<AdministratorController>) {
+    constructor(AdministratorService: IAdministratorService, hateoas: IHateoas) {
         this._service = AdministratorService;
-
-        const contextName: string = '/administrators'
         this.hateoas = hateoas
-        this.hateoas.registerContext(contextName)
-        this.hateoas.registerEndpoints(administratorEndpoints)
+        this.hateoas.registerContext<AdministratorController>(this.context, administratorEndpoints)
     }
 
     async list(request: Request, response: Response) {
@@ -29,7 +27,8 @@ class AdministratorController {
 
             const attendancesWithCollection: AdministratorDtoType[] =
                 await this.hateoas
-                    .injectEachCollection<AdministratorDtoType>({
+                    .injectEachCollection<AdministratorController, AdministratorDtoType>({
+                        context: this.context,
                         selfIdentity: 'retrieve',
                         items: administrators,
                         involvedEndpoints: [
@@ -43,6 +42,7 @@ class AdministratorController {
             const fakeCurrentPage = 1
             const rootCollection: Hyperlink =
                 await this.hateoas.getRootCollection({
+                    context: this.context,
                     selfIdentity: 'list',
                     // param: 'id',
                     // paramValue: '123',

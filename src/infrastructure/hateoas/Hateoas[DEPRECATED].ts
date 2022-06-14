@@ -3,35 +3,31 @@ import GivenInvolvedEndpointNotExistsException from "./errors/GivenInvolvedEndpo
 import InvalidParameterException from "./errors/InvalidParameterException"
 import MissingInvolvedEndpointsException from "./errors/MissingInvolvedEndpointsException"
 import MissingParameterException from "./errors/MissingParameterException"
-import IHateoas from "./IHateoas"
-import { Container, GetRootCollectionArgs, Hyperlink, InjectEachCollectionArgs, Links } from "./protocols"
+import IHateoas from "./IHateoas[DEPRECATED]"
+import { GetRootCollectionArgs, Hyperlink, InjectEachCollectionArgs, Links } from "./protocols"
 
-// Singleton
-class Hateoas implements IHateoas {
+class Hateoas<T> implements IHateoas<T> {
   private readonly origin: string = 'http://localhost:3000'
-  protected containers: Container<any>[] = []
+
+  protected context: string
+  protected endpoints: Endpoint<T>[]
 
   constructor() { }
 
   /**
    * 
    * @param context Receives context as string (.i.e. "/users")
-   * @param endpoints Receives registered endpoints for this context
    */
-  public registerContext<T>(context: string, endpoints: Endpoint<T>[]): void {
-    if (!context.includes('/')) {
-      throw new InvalidParameterException(400, 'Invalid context.')
-    }
+  public registerContext(context: string): void {
+    this.context = context
+  }
 
-    const containerExists = this.containers.find((container: Container<T>) =>
-      container.context === context)
-
-    if (!containerExists) {
-      this.containers.push({
-        context,
-        endpoints
-      })
-    }
+  /**
+   * 
+   * @param endpoints 
+   */
+  public registerEndpoints(endpoints: Endpoint<T>[]): void {
+    this.endpoints = endpoints
   }
 
   /**
@@ -39,19 +35,12 @@ class Hateoas implements IHateoas {
    * @param args 
    * @returns 
    */
-  public async injectEachCollection<T, D>(args: InjectEachCollectionArgs<T>): Promise<D[]> {
-    const { involvedEndpoints, selfIdentity, items, context } = args
+  public async injectEachCollection<DataType>(args: InjectEachCollectionArgs<T>): Promise<DataType[]> {
+    const { involvedEndpoints, selfIdentity, items } = args
 
-    const container: Container<T> | undefined = this.containers
-      .find((container: Container<T>) => container.context === context)
+    await this._validateContext(involvedEndpoints, selfIdentity)
 
-    if (!container) {
-      throw new InvalidParameterException(400, `Context not found.`)
-    }
-
-    await this._validateContext<T>(involvedEndpoints, selfIdentity, container)
-
-    const filteredEndpoints: Endpoint<T>[] = container.endpoints
+    const filteredEndpoints: Endpoint<T>[] = this.endpoints
       .filter((endpoint: Endpoint<T>) =>
         involvedEndpoints.includes(endpoint.methodName)
       )
@@ -64,7 +53,7 @@ class Hateoas implements IHateoas {
         item._links = {
           ...item._links,
           [name]: {
-            href: `${this.origin}${container.context}${endpoint.path.replace(`:${endpoint?.param}`, Reflect.get(item, endpoint?.param || ''))}`,
+            href: `${this.origin}${this.context}${endpoint.path.replace(`:${endpoint?.param}`, Reflect.get(item, endpoint?.param || ''))}`,
             method: endpoint.httpMethod.toLocaleUpperCase()
           },
         }
@@ -79,7 +68,7 @@ class Hateoas implements IHateoas {
    * @param args
    * @returns 
    */
-  public async getRootCollection<T>(args: GetRootCollectionArgs<T>): Promise<Hyperlink> {
+  public async getRootCollection(args: GetRootCollectionArgs<T>): Promise<Hyperlink> {
     const {
       involvedEndpoints,
       selfIdentity,
@@ -87,26 +76,18 @@ class Hateoas implements IHateoas {
       paramValue,
       withPagination,
       currentPage,
-      lastPage,
-      context
+      lastPage
     } = args
 
     let json: Hyperlink = {
       _links: {} as Links
     } as Hyperlink
 
-    const container: Container<T> | undefined = this.containers
-      .find((container: Container<T>) => container.context === context)
-
-    if (!container) {
-      throw new InvalidParameterException(400, `Context not found.`)
-    }
-
     // Validate all involvedEndpoints and selfIdentity given
-    await this._validateContext<T>(involvedEndpoints, selfIdentity, container)
+    await this._validateContext(involvedEndpoints, selfIdentity)
 
     // Filter endpoints with only involvedEndpoints given 
-    const filteredEndpoints: Endpoint<T>[] = container.endpoints
+    const filteredEndpoints: Endpoint<T>[] = this.endpoints
       .filter((endpoint: Endpoint<T>) =>
         involvedEndpoints.includes(endpoint.methodName)
       )
@@ -125,7 +106,7 @@ class Hateoas implements IHateoas {
       json._links = {
         ...json._links,
         [title]: {
-          href: `${this.origin}${container.context}${endpoint.path.replace(`:${param}`, paramValue || '')}`,
+          href: `${this.origin}${this.context}${endpoint.path.replace(`:${param}`, paramValue || '')}`,
           method: endpoint.httpMethod.toLocaleUpperCase()
         },
       }
@@ -141,7 +122,7 @@ class Hateoas implements IHateoas {
         throw new MissingParameterException(400, `Parameter lastPage is missing.`)
       }
 
-      const selfEndpoint: Endpoint<T> | undefined = container.endpoints
+      const selfEndpoint: Endpoint<T> | undefined = this.endpoints
         .find((endpoint: Endpoint<T>) =>
           endpoint.methodName === selfIdentity
         )
@@ -156,19 +137,19 @@ class Hateoas implements IHateoas {
       json._links = {
         ...json._links,
         first_page: {
-          href: `${this.origin}${container.context}${selfEndpointPathname}?page=1`,
+          href: `${this.origin}${this.context}${selfEndpointPathname}?page=1`,
           method: selfEndpointHttpMethod
         },
         previous_page: {
-          href: `${this.origin}${container.context}${selfEndpointPathname}?page=${(currentPage - 1) <= 1 ? 1 : (currentPage - 1)}`,
+          href: `${this.origin}${this.context}${selfEndpointPathname}?page=${(currentPage - 1) <= 1 ? 1 : (currentPage - 1)}`,
           method: selfEndpointHttpMethod
         },
         next_page: {
-          href: `${this.origin}${container.context}${selfEndpointPathname}?page=${(currentPage + 1)}`,
+          href: `${this.origin}${this.context}${selfEndpointPathname}?page=${(currentPage + 1)}`,
           method: selfEndpointHttpMethod
         },
         last_page: {
-          href: `${this.origin}${container.context}${selfEndpointPathname}?page=${lastPage}`,
+          href: `${this.origin}${this.context}${selfEndpointPathname}?page=${lastPage}`,
           method: selfEndpointHttpMethod
         },
       }
@@ -181,7 +162,11 @@ class Hateoas implements IHateoas {
    * @param involvedEndpoints
    * @param selfIdentity
    */
-  private async _validateContext<T>(involvedEndpoints: (keyof T)[], selfIdentity: keyof T, container: Container<T>): Promise<void> {
+  private async _validateContext(involvedEndpoints: (keyof T)[], selfIdentity: keyof T): Promise<void> {
+    if (!this.context.includes('/')) {
+      throw new InvalidParameterException(400, 'Invalid context.')
+    }
+
     if (!involvedEndpoints || (!!involvedEndpoints && involvedEndpoints.length === 0)) {
       throw new MissingInvolvedEndpointsException(400, 'involvedEndpoints parameter is missing.')
     }
@@ -191,7 +176,7 @@ class Hateoas implements IHateoas {
     }
 
     for await (const involvedEndpoint of involvedEndpoints) {
-      const endpointExists: Endpoint<T> | undefined = container.endpoints
+      const endpointExists: Endpoint<T> | undefined = this.endpoints
         .find((endpoint: Endpoint<T>) => {
           return endpoint.methodName === involvedEndpoint
         })
@@ -203,5 +188,5 @@ class Hateoas implements IHateoas {
   }
 }
 
-export default new Hateoas()
+export default Hateoas
 

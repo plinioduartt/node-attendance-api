@@ -22,6 +22,7 @@ export type InjectEachCollectionArgs<T> = {
   involvedEndpoints: (keyof T)[]
   selfIdentity: keyof T
   items: any
+  context: string
 }
 
 export type GetRootCollectionArgs<T> = {
@@ -32,6 +33,7 @@ export type GetRootCollectionArgs<T> = {
   withPagination?: boolean
   currentPage?: number
   lastPage?: number
+  context: string
 }
 
 export type SetAvailableEndpointsArgs = {

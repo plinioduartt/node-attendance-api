@@ -54,7 +54,7 @@ const administratorsRouter = Router();
 function initController(): AdministratorController {
     const repository: AdministratorRepository = new AdministratorRepository();
     const service: AdministratorService = new AdministratorService(repository);
-    const controller: AdministratorController = new AdministratorController(service, new Hateoas<AdministratorController>());
+    const controller: AdministratorController = new AdministratorController(service, Hateoas);
     return controller;
 };
 
