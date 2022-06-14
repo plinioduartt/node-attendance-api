@@ -10,7 +10,7 @@ class Hateoas<T> implements IHateoas<T> {
   private readonly origin: string = 'http://localhost:3000'
 
   protected context: string
-  protected endpoints: Endpoint<any>[]
+  protected endpoints: Endpoint<T>[]
 
   constructor() { }
 
@@ -26,7 +26,7 @@ class Hateoas<T> implements IHateoas<T> {
    * 
    * @param endpoints 
    */
-  public registerEndpoints<T>(endpoints: Endpoint<T>[]): void {
+  public registerEndpoints(endpoints: Endpoint<T>[]): void {
     this.endpoints = endpoints
   }
 

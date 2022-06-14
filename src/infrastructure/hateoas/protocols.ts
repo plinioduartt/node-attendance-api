@@ -1,3 +1,5 @@
+import { Endpoint } from "@/src/http/protocols/routes"
+
 export type Links = {
   [key: string]: {
     href: string
@@ -32,6 +34,11 @@ export type GetRootCollectionArgs<T> = {
   lastPage?: number
 }
 
-export type setAvailableEndpointsArgs = {
+export type SetAvailableEndpointsArgs = {
   basePath: string
+}
+
+export type Container<T> = {
+  context: string
+  endpoints: Endpoint<T>[]
 }

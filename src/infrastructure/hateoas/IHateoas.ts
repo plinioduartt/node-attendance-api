@@ -3,7 +3,7 @@ import { GetRootCollectionArgs, Hyperlink, InjectEachCollectionArgs } from "./pr
 
 interface IHateoas<T> {
   registerContext(context: string): void
-  registerEndpoints<T>(endpoints: Endpoint<T>[]): void
+  registerEndpoints(endpoints: Endpoint<T>[]): void
   injectEachCollection<DataType>(args: InjectEachCollectionArgs<T>): Promise<DataType[]>
   getRootCollection(args: GetRootCollectionArgs<T>): Promise<Hyperlink>
 }
